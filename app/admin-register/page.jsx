@@ -1,0 +1,98 @@
+"use client";
+
+import { useState } from "react";
+import axios from "axios";
+import Navbar from "../components/NavBar";
+
+export default function AdminRegister() {
+  const [form, setForm] = useState({
+    username: "",
+    email: "",
+    password: ""
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/admin/register",
+        form
+      );
+      alert(res.data.message);
+      setForm({ username: "", email: "", password: "" });
+    } catch (err) {
+      alert(err.response?.data?.message || "Admin registration failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <Navbar />
+
+     <div className="flex justify-center items-center min-h-[85vh]
+                      bg-gradient-to-br from-[#0b1f3a] via-[#0f2e5c] to-[#1e73be]">
+
+        <div className="w-full max-w-lg p-8 rounded-2xl
+                        backdrop-blur-xl bg-white/10
+                        border border-white/20
+                        shadow-[0_0_40px_rgba(30,115,190,0.25)]
+                        flex flex-col justify-center">
+
+          <h2 className="text-2xl font-semibold text-white text-center">
+            Admin Registration
+          </h2>
+
+          <div className="w-16 h-1 bg-gradient-to-r from-sky-400 to-blue-600 mx-auto mt-2 mb-6 rounded"></div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+
+            <input
+              placeholder="Admin Username"
+              required
+              value={form.username}
+              onChange={(e)=>setForm({...form, username:e.target.value})}
+              className="w-full px-4 py-3 rounded-lg bg-white/15 text-white placeholder-gray-300 border border-white/20 outline-none focus:ring-2 focus:ring-sky-400"
+            />
+
+            <input
+              type="email"
+              placeholder="Admin Email"
+              required
+              value={form.email}
+              onChange={(e)=>setForm({...form,email:e.target.value})}
+              className="w-full px-4 py-3 rounded-lg bg-white/15 text-white placeholder-gray-300 border border-white/20 outline-none focus:ring-2 focus:ring-sky-400"
+            />
+
+            <input
+              type="password"
+              placeholder="Password"
+              required
+              value={form.password}
+              onChange={(e)=>setForm({...form,password:e.target.value})}
+              className="w-full px-4 py-3 rounded-lg bg-white/15 text-white placeholder-gray-300 border border-white/20 outline-none focus:ring-2 focus:ring-sky-400"
+            />
+
+            <button
+              type="submit"
+              disabled={loading}
+              className={`w-full py-3 rounded-lg font-semibold
+                         bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600
+                         hover:from-sky-600 hover:to-indigo-700
+                         text-white shadow-lg transition duration-300
+                         ${loading ? "opacity-70 cursor-not-allowed" : ""}`}
+            >
+              {loading ? "Registering..." : "Register Admin"}
+            </button>
+
+          </form>
+        </div>
+      </div>
+    </>
+  );
+}
