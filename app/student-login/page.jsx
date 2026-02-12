@@ -60,12 +60,12 @@ export default function Login() {
     <>
       <Navbar />
 
-      <div className="flex justify-center items-center min-h-[85vh] bg-[#F8FBFD]">
+      <div className="flex justify-center items-center min-h-[85vh] bg-gray-100">
 
         <div className="w-full max-w-md p-8 rounded-2xl
-                        bg-[#FFFFFF] shadow-lg border border-[#E2E8F0]">
+                        bg-white shadow-lg border border-gray-200">
 
-          <h2 className="text-2xl font-semibold text-[#0F172A] text-center mb-6">
+          <h2 className="text-2xl font-semibold text-gray-800 text-center mb-6">
             Student Login
           </h2>
 
@@ -105,7 +105,7 @@ export default function Login() {
               className={`w-full py-3 rounded-lg font-semibold text-white transition
               ${disabledUntil
                   ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-[#0EA5E9] hover:bg-[#0284C7]"}
+                  : "bg-blue-500 hover:bg-blue-600"}
               `}
             >
               {disabledUntil
