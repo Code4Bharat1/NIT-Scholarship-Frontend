@@ -1,0 +1,367 @@
+[
+  {
+    "id": 1,
+    "subject": "Java",
+    "question": "Which of these is a valid Java identifier?",
+    "options": ["2variable", "_variable", "var-name", "class"],
+    "answer": "_variable"
+  },
+  {
+    "id": 2,
+    "subject": "Java",
+    "question": "What is the default value of a boolean variable in Java?",
+    "options": ["true", "false", "0", "null"],
+    "answer": "false"
+  },
+  {
+    "id": 3,
+    "subject": "Java",
+    "question": "Which keyword is used to inherit a class in Java?",
+    "options": ["extends", "implements", "inherits", "super"],
+    "answer": "extends"
+  },
+  {
+    "id": 4,
+    "subject": "Java",
+    "question": "Which of these is NOT a Java access modifier?",
+    "options": ["private", "protected", "public", "package-private"],
+    "answer": "package-private"
+  },
+  {
+    "id": 5,
+    "subject": "Java",
+    "question": "Which method is used to start a thread execution?",
+    "options": ["start()", "run()", "execute()", "init()"],
+    "answer": "start()"
+  },
+  {
+    "id": 6,
+    "subject": "Artificial Intelligence",
+    "question": "Which search algorithm is uninformed?",
+    "options": [
+      "A* Search",
+      "Breadth First Search",
+      "Best First Search",
+      "Genetic Algorithm"
+    ],
+    "answer": "Breadth First Search"
+  },
+  {
+    "id": 7,
+    "subject": "Artificial Intelligence",
+    "question": "What does PEAS stand for in AI?",
+    "options": [
+      "Performance, Environment, Actuators, Sensors",
+      "Performance, Efficiency, Algorithm, System",
+      "Perception, Evaluation, Action, Strategy",
+      "Process, Event, Action, Solution"
+    ],
+    "answer": "Performance, Environment, Actuators, Sensors"
+  },
+  {
+    "id": 8,
+    "subject": "Artificial Intelligence",
+    "question": "Which agent type uses past knowledge to make decisions?",
+    "options": [
+      "Simple Reflex Agent",
+      "Model-Based Agent",
+      "Goal-Based Agent",
+      "Utility-Based Agent"
+    ],
+    "answer": "Model-Based Agent"
+  },
+  {
+    "id": 9,
+    "subject": "Artificial Intelligence",
+    "question": "Which of these is a constraint satisfaction problem?",
+    "options": [
+      "8-Queens Problem",
+      "Sorting numbers",
+      "Binary Search",
+      "Matrix Multiplication"
+    ],
+    "answer": "8-Queens Problem"
+  },
+  {
+    "id": 10,
+    "subject": "Artificial Intelligence",
+    "question": "Which technique is used for learning from examples?",
+    "options": [
+      "Supervised Learning",
+      "Reinforcement Learning",
+      "Uninformed Search",
+      "Hill Climbing"
+    ],
+    "answer": "Supervised Learning"
+  },
+  {
+    "id": 11,
+    "subject": "Applied Mathematics",
+    "question": "What is the derivative of sin(x)?",
+    "options": ["cos(x)", "-sin(x)", "-cos(x)", "sin(x)"],
+    "answer": "cos(x)"
+  },
+  {
+    "id": 12,
+    "subject": "Applied Mathematics",
+    "question": "Integral of 1/x dx is?",
+    "options": ["ln(x) + C", "1/x + C", "x ln(x)", "e^x + C"],
+    "answer": "ln(x) + C"
+  },
+  {
+    "id": 13,
+    "subject": "Applied Mathematics",
+    "question": "If f(x)=x^2, what is f'(x)?",
+    "options": ["2x", "x^2", "x", "2"],
+    "answer": "2x"
+  },
+  {
+    "id": 14,
+    "subject": "Applied Mathematics",
+    "question": "Limit of (1+1/n)^n as n→∞ is?",
+    "options": ["0", "1", "e", "∞"],
+    "answer": "e"
+  },
+  {
+    "id": 15,
+    "subject": "Applied Mathematics",
+    "question": "Sum of first n natural numbers is?",
+    "options": ["n^2", "n(n+1)/2", "n(n-1)/2", "n^3"],
+    "answer": "n(n+1)/2"
+  },
+  {
+    "id": 16,
+    "subject": "IT Service Management",
+    "question": "Which framework is used for IT service management?",
+    "options": ["ITIL", "COBIT", "ISO 9001", "Six Sigma"],
+    "answer": "ITIL"
+  },
+  {
+    "id": 17,
+    "subject": "IT Service Management",
+    "question": "Which of these is a service lifecycle phase in ITIL?",
+    "options": [
+      "Service Design",
+      "Project Design",
+      "System Analysis",
+      "Implementation"
+    ],
+    "answer": "Service Design"
+  },
+  {
+    "id": 18,
+    "subject": "IT Service Management",
+    "question": "SLAs define?",
+    "options": [
+      "Service Level Agreement",
+      "Service List Access",
+      "System Level Analysis",
+      "Service License Agreement"
+    ],
+    "answer": "Service Level Agreement"
+  },
+  {
+    "id": 19,
+    "subject": "IT Service Management",
+    "question": "What is the purpose of incident management?",
+    "options": [
+      "Minimize disruption",
+      "Plan IT strategy",
+      "Install software",
+      "Define policies"
+    ],
+    "answer": "Minimize disruption"
+  },
+  {
+    "id": 20,
+    "subject": "IT Service Management",
+    "question": "Which process focuses on continual improvement?",
+    "options": ["CSI", "CMDB", "Change Management", "Event Management"],
+    "answer": "CSI"
+  },
+  {
+    "id": 21,
+    "subject": "Software Testing",
+    "question": "Which of the following is a black-box testing technique?",
+    "options": [
+      "Boundary Value Analysis",
+      "Statement Coverage",
+      "Path Coverage",
+      "Branch Coverage"
+    ],
+    "answer": "Boundary Value Analysis"
+  },
+  {
+    "id": 22,
+    "subject": "Software Testing",
+    "question": "Which type of testing is done after code changes?",
+    "options": [
+      "Regression Testing",
+      "Unit Testing",
+      "Integration Testing",
+      "Acceptance Testing"
+    ],
+    "answer": "Regression Testing"
+  },
+  {
+    "id": 23,
+    "subject": "Software Testing",
+    "question": "What is alpha testing?",
+    "options": [
+      "Performed by developers",
+      "Performed by end users",
+      "Performed by managers",
+      "Performed by testers externally"
+    ],
+    "answer": "Performed by developers"
+  },
+  {
+    "id": 24,
+    "subject": "Software Testing",
+    "question": "Which tool is used for automated test execution?",
+    "options": ["Selenium", "Jira", "Confluence", "Slack"],
+    "answer": "Selenium"
+  },
+  {
+    "id": 25,
+    "subject": "Software Testing",
+    "question": "Which testing checks system’s compliance with requirements?",
+    "options": [
+      "Validation Testing",
+      "Verification Testing",
+      "Unit Testing",
+      "Load Testing"
+    ],
+    "answer": "Validation Testing"
+  },
+  {
+    "id": 26,
+    "subject": "Linear Algebra",
+    "question": "The determinant of a 2x2 matrix [[a,b],[c,d]] is?",
+    "options": ["ad+bc", "ad-bc", "a+b+c+d", "ab-cd"],
+    "answer": "ad-bc"
+  },
+  {
+    "id": 27,
+    "subject": "Linear Algebra",
+    "question": "Eigenvalues are calculated from?",
+    "options": ["det(A-λI)=0", "det(A+λI)=0", "A^2=I", "A^T=A"],
+    "answer": "det(A-λI)=0"
+  },
+  {
+    "id": 28,
+    "subject": "Linear Algebra",
+    "question": "Rank of a matrix is?",
+    "options": [
+      "Number of rows",
+      "Number of independent rows/columns",
+      "Number of columns",
+      "Sum of elements"
+    ],
+    "answer": "Number of independent rows/columns"
+  },
+  {
+    "id": 29,
+    "subject": "Linear Algebra",
+    "question": "Transpose of a matrix swaps?",
+    "options": [
+      "Rows with columns",
+      "Rows with rows",
+      "Columns with columns",
+      "Diagonal elements"
+    ],
+    "answer": "Rows with columns"
+  },
+  {
+    "id": 30,
+    "subject": "Linear Algebra",
+    "question": "A square matrix is invertible if?",
+    "options": [
+      "Determinant is zero",
+      "Determinant is non-zero",
+      "Sum of elements is zero",
+      "All entries are positive"
+    ],
+    "answer": "Determinant is non-zero"
+  },
+  {
+    "id": 31,
+    "subject": "Internet of Things",
+    "question": "Which protocol is widely used in IoT?",
+    "options": ["MQTT", "HTTP", "FTP", "SMTP"],
+    "answer": "MQTT"
+  },
+  {
+    "id": 32,
+    "subject": "Internet of Things",
+    "question": "Which device is used to collect sensor data?",
+    "options": ["Microcontroller", "Monitor", "Keyboard", "Printer"],
+    "answer": "Microcontroller"
+  },
+  {
+    "id": 33,
+    "subject": "Internet of Things",
+    "question": "Raspberry Pi is used as?",
+    "options": ["Single Board Computer", "Laptop", "Server", "Router"],
+    "answer": "Single Board Computer"
+  },
+  {
+    "id": 34,
+    "subject": "Internet of Things",
+    "question": "Which communication type is common in IoT?",
+    "options": ["Wireless", "Wired", "Manual", "Offline"],
+    "answer": "Wireless"
+  },
+  {
+    "id": 35,
+    "subject": "Internet of Things",
+    "question": "Which IoT component controls devices?",
+    "options": ["Actuator", "Sensor", "Router", "Server"],
+    "answer": "Actuator"
+  },
+  {
+    "id": 36,
+    "subject": "Artificial Intelligence",
+    "question": "Which algorithm uses rewards to learn?",
+    "options": [
+      "Reinforcement Learning",
+      "Supervised Learning",
+      "Unsupervised Learning",
+      "Genetic Algorithm"
+    ],
+    "answer": "Reinforcement Learning"
+  },
+  {
+    "id": 37,
+    "subject": "Applied Mathematics",
+    "question": "Cos^2(x) + Sin^2(x) equals?",
+    "options": ["0", "1", "Sin(x)", "Cos(x)"],
+    "answer": "1"
+  },
+  {
+    "id": 38,
+    "subject": "Java",
+    "question": "Which of these is used for exception handling?",
+    "options": ["try-catch", "if-else", "switch", "for loop"],
+    "answer": "try-catch"
+  },
+  {
+    "id": 39,
+    "subject": "Software Testing",
+    "question": "Unit testing is performed by?",
+    "options": ["Developer", "Tester", "End User", "Manager"],
+    "answer": "Developer"
+  },
+  {
+    "id": 40,
+    "subject": "IT Service Management",
+    "question": "CMDB stands for?",
+    "options": [
+      "Configuration Management Database",
+      "Change Management Database",
+      "Control Management Database",
+      "Configuration Monitoring Database"
+    ],
+    "answer": "Configuration Management Database"
+  }
+]

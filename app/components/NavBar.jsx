@@ -22,8 +22,7 @@ export default function Navbar() {
           <Link href="/">Home</Link>
           <Link href="/student-register">Student Register</Link>
           <Link href="/student-login">Student Login</Link>
-          <Link href="/admin-register">Admin Register</Link>
-          <Link href="/admin-login">Admin Login</Link>
+      
         </div>
 
       </div>

@@ -12,11 +12,18 @@ export default function AdminDashboard() {
   const [subject, setSubject] = useState("");
   const [content, setContent] = useState("");
 
-  // Fetch students
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  // Fetch students with search + pagination
   const fetchStudents = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/students");
+      const res = await axios.get(
+        `http://localhost:5000/api/students?page=${page}&limit=5&search=${search}`
+      );
       setStudents(res.data.students);
+      setTotalPages(res.data.totalPages);
     } catch (err) {
       console.error("Failed to fetch students:", err);
     }
@@ -24,14 +31,14 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     fetchStudents();
-  }, []);
+  }, [page, search]);
 
   // Delete student
   const handleDelete = async (id) => {
     if (!confirm("Are you sure you want to delete this student?")) return;
     try {
       await axios.delete(`http://localhost:5000/api/students/${id}`);
-      setStudents(students.filter((s) => s._id !== id));
+      fetchStudents();
     } catch (err) {
       console.error(err);
       alert("Failed to delete student");
@@ -55,7 +62,7 @@ export default function AdminDashboard() {
       await axios.post("http://localhost:5000/api/admin/send-email", {
         recipients,
         subject,
-        content
+        content,
       });
 
       alert("Email sent successfully!");
@@ -91,9 +98,6 @@ export default function AdminDashboard() {
             <li className="px-4 py-2 hover:bg-blue-600 cursor-pointer rounded">
               Students
             </li>
-            <li className="px-4 py-2 hover:bg-blue-600 cursor-pointer rounded">
-              Settings
-            </li>
             <li className="px-4 py-2 hover:bg-red-600 cursor-pointer rounded">
               Logout
             </li>
@@ -115,6 +119,7 @@ export default function AdminDashboard() {
         <div className="p-8">
           <h2 className="text-3xl font-semibold mb-4">Welcome, Admin!</h2>
 
+          {/* Bulk Email Button */}
           <button
             className="mb-4 bg-green-500 hover:bg-green-600 px-4 py-2 rounded transition"
             onClick={() => openEmailModal("", true)}
@@ -132,6 +137,7 @@ export default function AdminDashboard() {
                   <th className="text-left px-4 py-2">Actions</th>
                 </tr>
               </thead>
+
               <tbody>
                 {students.map((s) => (
                   <tr key={s._id} className="border-b border-white/10 hover:bg-white/10">
@@ -139,15 +145,62 @@ export default function AdminDashboard() {
                     <td className="px-4 py-2">{s.email}</td>
                     <td className="px-4 py-2">{s.mobile || "N/A"}</td>
                     <td className="px-4 py-2 flex gap-2">
-                      <button onClick={() => openViewModal(s)}>👁️</button>
-                      <button onClick={() => openEmailModal(s.email)}>✉️</button>
-                      <button onClick={() => handleDelete(s._id)}>🗑️</button>
-                      <button onClick={() => alert("Edit student feature")}>✏️</button>
+                      <button
+                        onClick={() => openViewModal(s)}
+                        className="p-2 border border-white/30 rounded hover:bg-white/20 transition"
+                        title="View"
+                      >
+                        👁️
+                      </button>
+                      <button
+                        onClick={() => openEmailModal(s.email)}
+                        className="p-2 border border-white/30 rounded hover:bg-white/20 transition"
+                        title="Send Email"
+                      >
+                        ✉️
+                      </button>
+                      <button
+                        onClick={() => handleDelete(s._id)}
+                        className="p-2 border border-white/30 rounded hover:bg-white/20 transition"
+                        title="Delete"
+                      >
+                        🗑️
+                      </button>
+                      <button
+                        onClick={() => alert("Edit student feature")}
+                        className="p-2 border border-white/30 rounded hover:bg-white/20 transition"
+                        title="Edit"
+                      >
+                        ✏️
+                      </button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+
+            {/* Pagination */}
+            <div className="flex justify-center items-center gap-4 mt-4">
+              <button
+                disabled={page === 1}
+                onClick={() => setPage(page - 1)}
+                className="px-3 py-1 bg-gray-600 rounded disabled:opacity-50"
+              >
+                Prev
+              </button>
+
+              <span>
+                Page {page} of {totalPages}
+              </span>
+
+              <button
+                disabled={page === totalPages}
+                onClick={() => setPage(page + 1)}
+                className="px-3 py-1 bg-gray-600 rounded disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -163,8 +216,7 @@ export default function AdminDashboard() {
             <input
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
-              placeholder="Subject"
-              className="w-full mb-3 px-3 py-2 rounded bg-white/10 text-white"
+              className="w-full mb-3 px-3 py-2 rounded bg-white/10 text-white placeholder-gray-300 outline-none"
             />
 
             <textarea
@@ -172,12 +224,22 @@ export default function AdminDashboard() {
               onChange={(e) => setContent(e.target.value)}
               placeholder="Content"
               rows={5}
-              className="w-full mb-3 px-3 py-2 rounded bg-white/10 text-white"
+              className="w-full mb-3 px-3 py-2 rounded bg-white/10 text-white placeholder-gray-300 outline-none"
             />
 
             <div className="flex justify-end gap-3">
-              <button onClick={() => setEmailModal({ open: false })}>Cancel</button>
-              <button onClick={handleSendEmail}>Send</button>
+              <button
+                className="px-4 py-2 bg-gray-500 hover:bg-gray-600 rounded"
+                onClick={() => setEmailModal({ open: false, to: "", isBulk: false })}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 bg-sky-500 hover:bg-sky-600 rounded"
+                onClick={handleSendEmail}
+              >
+                Send
+              </button>
             </div>
           </div>
         </div>
@@ -185,20 +247,31 @@ export default function AdminDashboard() {
 
       {/* View Modal */}
       {viewModal.open && viewModal.student && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-          <div className="bg-[#0f2e5c] rounded-xl p-6 w-full max-w-md">
-            <h3 className="text-xl font-semibold mb-4">Student Details</h3>
-            <p>Name: {viewModal.student.username}</p>
-            <p>Email: {viewModal.student.email}</p>
-            <button
-              className="mt-4"
-              onClick={() => setViewModal({ open: false, student: null })}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
+  <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+    <div className="bg-[#0f2e5c] rounded-xl p-6 w-full max-w-md">
+      <h3 className="text-xl font-semibold mb-4">Student Details</h3>
+      <div className="space-y-2">
+        <p><strong>Name:</strong> {viewModal.student.username}</p>
+        <p><strong>Email:</strong> {viewModal.student.email}</p>
+        <p><strong>Mobile:</strong> {viewModal.student.mobile || "N/A"}</p>
+        <p><strong>Parent Mobile:</strong> {viewModal.student.parentMobile || "N/A"}</p>
+        <p><strong>Address:</strong> {viewModal.student.address || "N/A"}</p>
+        <p><strong>Qualifications:</strong> {viewModal.student.qualifications || "N/A"}</p>
+        <p><strong>Course Interest:</strong> {viewModal.student.courseInterest || "N/A"}</p>
+        <p><strong>Registered On:</strong> {new Date(viewModal.student.createdAt).toLocaleDateString()}</p>
+        <p><strong>Login Allowed After:</strong> {new Date(viewModal.student.loginDate).toLocaleString()}</p>
+      </div>
+      <div className="flex justify-end mt-4">
+        <button className="px-4 py-2 bg-gray-500 hover:bg-gray-600 rounded"
+                onClick={() => setViewModal({ open: false, student: null })}>
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+
     </div>
   );
 }
