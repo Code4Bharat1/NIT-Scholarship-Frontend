@@ -76,8 +76,8 @@ export default function AdminDashboard() {
       {/* Sidebar */}
       <div
         className={`bg-gradient-to-b from-[#0f2e5c] to-[#071a33] 
-                    flex flex-col justify-between transition-all duration-300
-                    ${sidebarOpen ? "w-64" : "w-20"}`}
+        flex flex-col justify-between transition-all duration-300
+        ${sidebarOpen ? "w-64" : "w-20"}`}
       >
         <div>
           <h1 className="text-2xl font-bold text-center mt-6 mb-8">
@@ -115,7 +115,6 @@ export default function AdminDashboard() {
         <div className="p-8">
           <h2 className="text-3xl font-semibold mb-4">Welcome, Admin!</h2>
 
-          {/* Bulk Email Button */}
           <button
             className="mb-4 bg-green-500 hover:bg-green-600 px-4 py-2 rounded transition"
             onClick={() => openEmailModal("", true)}
@@ -123,7 +122,6 @@ export default function AdminDashboard() {
             Send Email to All Students
           </button>
 
-          {/* Student Table */}
           <div className="bg-white/10 backdrop-blur-lg rounded-xl p-4 shadow-inner overflow-x-auto">
             <table className="w-full table-auto border-collapse text-white">
               <thead>
@@ -141,34 +139,10 @@ export default function AdminDashboard() {
                     <td className="px-4 py-2">{s.email}</td>
                     <td className="px-4 py-2">{s.mobile || "N/A"}</td>
                     <td className="px-4 py-2 flex gap-2">
-                      <button
-                        onClick={() => openViewModal(s)}
-                        className="p-2 border border-white/30 rounded hover:bg-white/20 transition"
-                        title="View"
-                      >
-                        👁️
-                      </button>
-                      <button
-                        onClick={() => openEmailModal(s.email)}
-                        className="p-2 border border-white/30 rounded hover:bg-white/20 transition"
-                        title="Send Email"
-                      >
-                        ✉️
-                      </button>
-                      <button
-                        onClick={() => handleDelete(s._id)}
-                        className="p-2 border border-white/30 rounded hover:bg-white/20 transition"
-                        title="Delete"
-                      >
-                        🗑️
-                      </button>
-                      <button
-                        onClick={() => alert("Edit student feature")}
-                        className="p-2 border border-white/30 rounded hover:bg-white/20 transition"
-                        title="Edit"
-                      >
-                        ✏️
-                      </button>
+                      <button onClick={() => openViewModal(s)}>👁️</button>
+                      <button onClick={() => openEmailModal(s.email)}>✉️</button>
+                      <button onClick={() => handleDelete(s._id)}>🗑️</button>
+                      <button onClick={() => alert("Edit student feature")}>✏️</button>
                     </td>
                   </tr>
                 ))}
@@ -187,66 +161,44 @@ export default function AdminDashboard() {
             </h3>
 
             <input
-              type="text"
-              placeholder="Subject"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
-              className="w-full mb-3 px-3 py-2 rounded bg-white/10 text-white placeholder-gray-300 outline-none"
+              placeholder="Subject"
+              className="w-full mb-3 px-3 py-2 rounded bg-white/10 text-white"
             />
 
             <textarea
-              placeholder="Content"
               value={content}
               onChange={(e) => setContent(e.target.value)}
+              placeholder="Content"
               rows={5}
-              className="w-full mb-3 px-3 py-2 rounded bg-white/10 text-white placeholder-gray-300 outline-none"
+              className="w-full mb-3 px-3 py-2 rounded bg-white/10 text-white"
             />
 
             <div className="flex justify-end gap-3">
-              <button
-                className="px-4 py-2 bg-gray-500 hover:bg-gray-600 rounded"
-                onClick={() => setEmailModal({ open: false, to: "", isBulk: false })}
-              >
-                Cancel
-              </button>
-              <button
-                className="px-4 py-2 bg-sky-500 hover:bg-sky-600 rounded"
-                onClick={handleSendEmail}
-              >
-                Send
-              </button>
+              <button onClick={() => setEmailModal({ open: false })}>Cancel</button>
+              <button onClick={handleSendEmail}>Send</button>
             </div>
           </div>
         </div>
       )}
 
-      {/* View Student Modal */}
+      {/* View Modal */}
       {viewModal.open && viewModal.student && (
-  <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-    <div className="bg-[#0f2e5c] rounded-xl p-6 w-full max-w-md">
-      <h3 className="text-xl font-semibold mb-4">Student Details</h3>
-      <div className="space-y-2">
-        <p><strong>Name:</strong> {viewModal.student.username}</p>
-        <p><strong>Email:</strong> {viewModal.student.email}</p>
-        <p><strong>Mobile:</strong> {viewModal.student.mobile || "N/A"}</p>
-        <p><strong>Parent Mobile:</strong> {viewModal.student.parentMobile || "N/A"}</p>
-        <p><strong>Address:</strong> {viewModal.student.address || "N/A"}</p>
-        <p><strong>Qualifications:</strong> {viewModal.student.qualifications || "N/A"}</p>
-        <p><strong>Course Interest:</strong> {viewModal.student.courseInterest || "N/A"}</p>
-        <p><strong>Registered On:</strong> {new Date(viewModal.student.createdAt).toLocaleDateString()}</p>
-        <p><strong>Login Allowed After:</strong> {new Date(viewModal.student.loginDate).toLocaleString()}</p>
-      </div>
-      <div className="flex justify-end mt-4">
-        <button className="px-4 py-2 bg-gray-500 hover:bg-gray-600 rounded"
-                onClick={() => setViewModal({ open: false, student: null })}>
-          Close
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-
-
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+          <div className="bg-[#0f2e5c] rounded-xl p-6 w-full max-w-md">
+            <h3 className="text-xl font-semibold mb-4">Student Details</h3>
+            <p>Name: {viewModal.student.username}</p>
+            <p>Email: {viewModal.student.email}</p>
+            <button
+              className="mt-4"
+              onClick={() => setViewModal({ open: false, student: null })}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
