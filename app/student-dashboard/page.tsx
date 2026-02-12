@@ -1,137 +1,229 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { FileText, Clock, Target } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export default function Dashboard() {
+
+  type Student = {
+  username: string;
+  email: string;
+};
+
+
+
+export default function StudentDashboard() {
+  const [student, setStudent] = useState<Student | null>(null);
+  const [open, setOpen] = useState(false);
+  const [rulesOpen, setRulesOpen] = useState(false);
+  
+
   const router = useRouter();
-  const [name, setName] = useState("Student");
-  const [showRules, setShowRules] = useState(false);
-  const [accepted, setAccepted] = useState(false);
 
   useEffect(() => {
-    const storedName = localStorage.getItem("name");
-    if (storedName) setName(storedName);
-  }, []);
+    const fetchProfile = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          router.push("/student-login");
+          return;
+        }
+
+        const res = await axios.get<Student>(
+          "http://localhost:5000/api/students/profile",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setStudent(res.data);
+      } catch (err: any) {
+        if (err.response?.status === 401) {
+          localStorage.removeItem("token");
+          router.push("/student-login");
+        }
+      }
+    };
+
+    fetchProfile();
+  }, [router]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    router.push("/student-login");
+  };
 
   const handleStartExam = () => {
-    if (accepted) {
-      router.push("/student-dashboard/exam/start");
-    } else {
-      alert("Please accept the rules to start the exam.");
-    }
+    router.push("/student-dashboard/exam/start");
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-blue-50 to-cyan-100 flex items-center justify-center px-4 py-10">
+    <div className="min-h-screen bg-slate-100 flex flex-col">
 
-      {/* Main Glass Card */}
-      <div className="max-w-4xl w-full bg-white/80 backdrop-blur-xl shadow-2xl rounded-3xl p-12 border border-white/40">
+      {/* NAVBAR */}
+      <div className="w-full bg-slate-900 text-white px-8 py-4 flex justify-between items-center shadow-md">
+        <h1 className="text-xl font-semibold tracking-wide">
+          NIT Scholarship Portal
+        </h1>
 
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-extrabold text-indigo-800 mb-3">
-            Welcome, {name}
-          </h1>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            You are registered for the National Scholarship Examination.
-            Please review the instructions carefully before beginning.
-          </p>
-        </div>
-
-        {/* Info Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 text-center">
-
-          <div className="bg-gradient-to-br from-indigo-500 to-blue-600 text-white p-8 rounded-2xl shadow-xl transform hover:scale-105 transition duration-300">
-            <h2 className="text-xl font-semibold mb-3">Total Questions</h2>
-            <p className="text-3xl font-bold">120</p>
-          </div>
-
-          <div className="bg-gradient-to-br from-emerald-500 to-green-600 text-white p-8 rounded-2xl shadow-xl transform hover:scale-105 transition duration-300">
-            <h2 className="text-xl font-semibold mb-3">Time Limit</h2>
-            <p className="text-3xl font-bold">2 Hours</p>
-          </div>
-
-          <div className="bg-gradient-to-br from-amber-400 to-orange-500 text-white p-8 rounded-2xl shadow-xl transform hover:scale-105 transition duration-300">
-            <h2 className="text-xl font-semibold mb-3">Passing Score</h2>
-            <p className="text-3xl font-bold">60%</p>
-          </div>
-
-        </div>
-
-        {/* Start Button */}
-        <div className="text-center">
-          <button
-            className="px-10 py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-semibold text-lg shadow-lg hover:scale-105 transition duration-300"
-            onClick={() => setShowRules(true)}
-          >
-            Read Rules & Regulations
-          </button>
-        </div>
-
-        {/* Footer */}
-        <p className="mt-10 text-gray-500 text-sm text-center">
-          National Institute of Technology Scholarship Exam Portal
-        </p>
-
-        {/* Modal */}
-        {showRules && (
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-
-            <div className="bg-white rounded-3xl shadow-2xl max-w-3xl w-full p-10 relative animate-fadeIn">
-
-              <h2 className="text-3xl font-bold mb-6 text-center text-indigo-800">
-                Exam Rules & Instructions
-              </h2>
-
-              <ul className="list-decimal list-inside space-y-4 text-gray-700 text-lg mb-8 leading-relaxed">
-                <li>Total questions: <span className="font-semibold">120</span></li>
-                <li>Time allowed: <span className="font-semibold">2 Hours</span></li>
-                <li>Do not refresh or close the browser during the exam</li>
-                <li>Each question carries <span className="font-semibold">1 mark</span></li>
-                <li>No negative marking for incorrect answers</li>
-                <li>Ensure stable internet connection</li>
-              </ul>
-
-              <div className="flex items-center mb-8">
-                <input
-                  type="checkbox"
-                  id="accept"
-                  className="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                  checked={accepted}
-                  onChange={(e) => setAccepted(e.target.checked)}
-                />
-                <label htmlFor="accept" className="ml-3 text-gray-700 text-lg">
-                  I have read and accept all the rules
-                </label>
+        {student && (
+          <div className="relative">
+            <div
+              onClick={() => setOpen(!open)}
+              className="flex items-center gap-3 cursor-pointer"
+            >
+              <div className="w-9 h-9 rounded-full bg-indigo-500 flex items-center justify-center font-semibold">
+                {student.username?.charAt(0).toUpperCase()}
               </div>
 
-              <div className="flex justify-between">
-                <button
-                  className="px-6 py-3 rounded-xl bg-gray-300 text-gray-700 hover:bg-gray-400 transition"
-                  onClick={() => setShowRules(false)}
-                >
-                  Close
-                </button>
-
-                <button
-                  disabled={!accepted}
-                  onClick={handleStartExam}
-                  className={`px-8 py-3 rounded-xl font-semibold text-white shadow-lg transition duration-300 ${
-                    accepted
-                      ? "bg-gradient-to-r from-emerald-500 to-green-600 hover:scale-105"
-                      : "bg-gray-400 cursor-not-allowed"
-                  }`}
-                >
-                  Start Exam
-                </button>
+              <div className="hidden md:block text-sm text-right">
+                <p className="font-medium">{student.username}</p>
+                <p className="text-slate-300 text-xs">{student.email}</p>
               </div>
-
             </div>
+
+            {open && (
+              <div className="absolute right-0 mt-3 w-44 bg-white text-slate-700 rounded-xl shadow-xl border z-50">
+               <button
+  onClick={() => {
+    setOpen(false);
+  }}
+  className="w-full text-left px-4 py-3 hover:bg-slate-100 rounded-t-xl"
+>
+  Profile
+</button>
+
+                <button
+                  onClick={handleLogout}
+                  className="w-full text-left px-4 py-3 hover:bg-slate-100 text-red-500 rounded-b-xl"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
           </div>
         )}
-
       </div>
+
+      {/* Content */}
+      <div className="flex-1 px-6 py-10 flex justify-center">
+        <div className="w-full max-w-6xl bg-white rounded-2xl shadow-lg border border-slate-200 p-10">
+
+          {/* Welcome */}
+          <div className="text-center mb-10">
+            <h1 className="text-3xl font-semibold text-slate-800 mb-2">
+              Welcome, {student?.username || "Student"}
+            </h1>
+            <p className="text-slate-500">
+              You are registered for the National Scholarship Examination.
+            </p>
+          </div>
+
+          {/* Exam Info */}
+          <div className="flex justify-center gap-10 text-slate-600 mb-10 flex-wrap">
+            <p>
+              Status: <span className="font-medium text-indigo-600">Not Started</span>
+            </p>
+            <p>
+              Attempts Left: <span className="font-medium">1</span>
+            </p>
+            <p>
+              Exam Date: <span className="font-medium">25 Feb 2026</span>
+            </p>
+          </div>
+
+          {/* Cards */}
+          <div className="grid md:grid-cols-3 gap-6 mb-12">
+            <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-6 hover:shadow-md transition">
+              <div className="flex items-center gap-4">
+                <FileText size={36} className="text-indigo-600" />
+                <div>
+                  <p className="text-slate-600 text-sm">Total Questions</p>
+                  <h3 className="text-2xl font-semibold text-slate-800">120</h3>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-6 hover:shadow-md transition">
+              <div className="flex items-center gap-4">
+                <Clock size={36} className="text-emerald-600" />
+                <div>
+                  <p className="text-slate-600 text-sm">Time Limit</p>
+                  <h3 className="text-2xl font-semibold text-slate-800">2 Hours</h3>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-amber-50 border border-amber-100 rounded-xl p-6 hover:shadow-md transition">
+              <div className="flex items-center gap-4">
+                <Target size={36} className="text-amber-600" />
+                <div>
+                  <p className="text-slate-600 text-sm">Passing Score</p>
+                  <h3 className="text-2xl font-semibold text-slate-800">60%</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Buttons */}
+          <div className="flex justify-center gap-6 flex-wrap">
+            <button
+              onClick={handleStartExam}
+              className="px-8 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-medium shadow-sm transition"
+            >
+              Start Exam
+            </button>
+
+            <button
+              onClick={() => setRulesOpen(true)}
+              className="px-8 py-3 rounded-lg border border-slate-300 hover:bg-slate-100 text-slate-700 font-medium transition"
+            >
+              Read Rules
+            </button>
+          </div>
+
+          {/* Footer */}
+          <div className="mt-12 pt-6 border-t text-center text-sm text-slate-400">
+            National Institute of Technology Scholarship Examination Portal
+          </div>
+        </div>
+      </div>
+
+      {/* Rules Modal */}
+      {rulesOpen && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white w-full max-w-lg rounded-xl shadow-lg p-6">
+            <h2 className="text-xl font-semibold mb-4">Scholarship Exam Rules</h2>
+
+            <ul className="list-disc pl-5 space-y-2 text-slate-600 text-sm">
+              <li>Exam duration is 2 hours.</li>
+              <li>Each student can attempt only once.</li>
+              <li>Do not refresh or close the browser during the exam.</li>
+              <li>Internet or external help is not allowed.</li>
+              <li>Minimum 60% is required to qualify.</li>
+            </ul>
+
+            <div className="mt-6 text-right">
+              <button
+                onClick={() => setRulesOpen(false)}
+                className="px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+          
+        </div>
+      )}
+
+  
+
+
+
     </div>
   );
 }

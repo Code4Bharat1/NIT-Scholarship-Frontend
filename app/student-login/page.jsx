@@ -3,8 +3,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "../components/NavBar";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
+  const router = useRouter();
+
   const [form, setForm] = useState({
     email: "",
     password: ""
@@ -23,7 +26,14 @@ export default function Login() {
         form
       );
 
+      // SAVE TOKEN
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("student", JSON.stringify(res.data.student));
+
       alert(res.data.message);
+
+      // Redirect to dashboard
+      router.push("/student-dashboard");
 
     } catch (err) {
       if (err.response?.status === 403) {
@@ -37,7 +47,7 @@ export default function Login() {
     setLoading(false);
   };
 
-  // Auto-enable button when date reached
+  // Auto-enable login button after allowed date
   useEffect(() => {
     if (!disabledUntil) return;
 
@@ -71,6 +81,7 @@ export default function Login() {
               type="email"
               placeholder="Email"
               required
+              value={form.email}
               onChange={(e) =>
                 setForm({ ...form, email: e.target.value })
               }
@@ -84,6 +95,7 @@ export default function Login() {
               type="password"
               placeholder="Password"
               required
+              value={form.password}
               onChange={(e) =>
                 setForm({ ...form, password: e.target.value })
               }
@@ -104,6 +116,8 @@ export default function Login() {
             >
               {disabledUntil
                 ? "Login locked until allowed date"
+                : loading
+                ? "Logging in..."
                 : "Login"}
             </button>
 

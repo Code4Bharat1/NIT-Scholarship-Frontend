@@ -9,10 +9,10 @@ export default function Register() {
     username: "",
     email: "",
     address: "",
-    mobileNumber: "",
-    parentsMobile: "",
+    mobile: "",
+    parentMobile: "",
     qualifications: "",
-    course: "",
+    courseInterest: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -35,10 +35,10 @@ export default function Register() {
         username: "",
         email: "",
         address: "",
-        mobileNumber: "",
-        parentsMobile: "",
+        mobile: "",
+        parentMobile: "",
         qualifications: "",
-        course: "",
+        courseInterest: "",
       });
     } catch (err) {
       setMessage({
@@ -121,8 +121,8 @@ export default function Register() {
               <input
                 placeholder="Mobile Number"
                 required
-                value={form.mobileNumber}
-                onChange={(e) => setForm({ ...form, mobileNumber: e.target.value })}
+                value={form.mobile}
+                onChange={(e) => setForm({ ...form, mobile: e.target.value })}
                 className="w-full px-4 py-2 rounded-lg bg-white/10 text-white placeholder-gray-300 outline-none focus:ring-2 focus:ring-sky-400"
               />
             </div>
@@ -133,8 +133,8 @@ export default function Register() {
               <input
                 placeholder="Parent's Mobile"
                 required
-                value={form.parentsMobile}
-                onChange={(e) => setForm({ ...form, parentsMobile: e.target.value })}
+                value={form.parentMobile}
+                onChange={(e) => setForm({ ...form, parentMobile: e.target.value })}
                 className="w-full px-4 py-2 rounded-lg bg-white/10 text-white placeholder-gray-300 outline-none focus:ring-2 focus:ring-sky-400"
               />
             </div>
@@ -156,8 +156,8 @@ export default function Register() {
               <label className="text-white mb-1">Course</label>
               <select
   required
-  value={form.course}
-  onChange={(e) => setForm({ ...form, course: e.target.value })}
+  value={form.courseInterest}
+  onChange={(e) => setForm({ ...form, courseInterest: e.target.value })}
   className="w-full px-4 py-2 rounded-lg
              bg-white/10 text-white
              placeholder-gray-300
@@ -166,10 +166,10 @@ export default function Register() {
              [&>option]:text-black [&>option]:bg-white"
 >
   <option value="" disabled>Select Course</option>
-  <option value="Computer Science">Computer Science</option>
-  <option value="Electronics">Electronics</option>
-  <option value="Mechanical">Mechanical</option>
-  <option value="Civil">Civil</option>
+  <option value="Artifical intelligence and Machine learning">Artifical intelligence and Machine learning</option>
+  <option value="Artifical intelligence and Robotics">Artifical intelligence and Robotics</option>
+  <option value="Cyber security">Cyber security</option>
+  <option value="Graphics,Animation,VFX and Multimedia">Graphics,Animation,VFX and Multimedia</option>
 </select>
 
             </div>
@@ -180,7 +180,7 @@ export default function Register() {
                 type="submit"
                 disabled={loading}
                 className={`w-full py-3 rounded-lg font-semibold
-                           bg-gradient-to-r from-sky-500 to-blue-600
+                           bg-gradient-to-br from-sky-500 to-blue-600
                            hover:from-sky-600 hover:to-blue-700
                            text-white shadow-lg
                            transition duration-300
