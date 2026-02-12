@@ -26,13 +26,10 @@ export default function Login() {
         form
       );
 
-      // SAVE TOKEN
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("student", JSON.stringify(res.data.student));
 
       alert(res.data.message);
-
-      // Redirect to dashboard
       router.push("/student-dashboard");
 
     } catch (err) {
@@ -47,7 +44,6 @@ export default function Login() {
     setLoading(false);
   };
 
-  // Auto-enable login button after allowed date
   useEffect(() => {
     if (!disabledUntil) return;
 
@@ -64,14 +60,12 @@ export default function Login() {
     <>
       <Navbar />
 
-      <div className="flex justify-center items-center min-h-[85vh]
-                      bg-gradient-to-br from-[#0b1f3a] via-[#0f2e5c] to-[#1e73be]">
+      <div className="flex justify-center items-center min-h-[85vh] bg-[#F8FBFD]">
 
         <div className="w-full max-w-md p-8 rounded-2xl
-                        backdrop-blur-lg bg-white/10
-                        border border-white/20 shadow-xl">
+                        bg-[#FFFFFF] shadow-lg border border-[#E2E8F0]">
 
-          <h2 className="text-2xl font-semibold text-white text-center mb-6">
+          <h2 className="text-2xl font-semibold text-[#0F172A] text-center mb-6">
             Student Login
           </h2>
 
@@ -85,10 +79,10 @@ export default function Login() {
               onChange={(e) =>
                 setForm({ ...form, email: e.target.value })
               }
-              className="w-full px-4 py-3 rounded-lg
-                         bg-white/10 text-white
-                         placeholder-gray-300 outline-none
-                         focus:ring-2 focus:ring-sky-400"
+              className="w-full px-4 py-2 rounded-lg
+                         bg-[#EAF7FB] text-[#0F172A]
+                         placeholder-[#64748B] outline-none
+                         focus:ring-2 focus:ring-[#0EA5E9]"
             />
 
             <input
@@ -99,10 +93,10 @@ export default function Login() {
               onChange={(e) =>
                 setForm({ ...form, password: e.target.value })
               }
-              className="w-full px-4 py-3 rounded-lg
-                         bg-white/10 text-white
-                         placeholder-gray-300 outline-none
-                         focus:ring-2 focus:ring-sky-400"
+              className="w-full px-4 py-2 rounded-lg
+                         bg-[#EAF7FB] text-[#0F172A]
+                         placeholder-[#64748B] outline-none
+                         focus:ring-2 focus:ring-[#0EA5E9]"
             />
 
             <button
@@ -110,8 +104,8 @@ export default function Login() {
               disabled={loading || disabledUntil}
               className={`w-full py-3 rounded-lg font-semibold text-white transition
               ${disabledUntil
-                  ? "bg-gray-500 cursor-not-allowed"
-                  : "bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700"}
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-[#0EA5E9] hover:bg-[#0284C7]"}
               `}
             >
               {disabledUntil
