@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import axios from "axios";
-import Navbar from "../components/NavBar";
+import Adminnav from "../components/Adminnav";
 
 export default function AdminLogin() {
   const [form, setForm] = useState({
@@ -44,7 +44,7 @@ export default function AdminLogin() {
 
   return (
     <>
-      <Navbar />
+      <Adminnav />
 
       <div className="flex justify-center items-center min-h-[85vh] bg-[#F8FBFD]">
 

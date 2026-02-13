@@ -16,6 +16,7 @@ export default function AdminDashboard() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+ const [deleteModal, setDeleteModal] = useState({ open: false, id: null });
 
   // Fetch students with search + pagination
   const fetchStudents = async () => {
@@ -34,12 +35,18 @@ export default function AdminDashboard() {
     fetchStudents();
   }, [page, search]);
 
-  // Delete student
-  const handleDelete = async (id) => {
-    if (!confirm("Are you sure you want to delete this student?")) return;
+
+  // OPEN delete modal
+  const handleDelete = (id) => {
+    setDeleteModal({ open: true, id });
+  };
+
+  // CONFIRM delete
+  const confirmDelete = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/students/${id}`);
+      await axios.delete(`http://localhost:5000/api/students/${deleteModal.id}`);
       fetchStudents();
+      setDeleteModal({ open: false, id: null });
     } catch (err) {
       console.error(err);
       alert("Failed to delete student");
@@ -174,7 +181,7 @@ const handleSendEmail = async () => {
       {/* Email Modal */}
       {emailModal.open && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
-          <div className="bg-[#0B1324] rounded-xl p-6 w-full max-w-md shadow-lg">
+          <div className="bg-[#0284C7] rounded-xl p-6 w-full max-w-md shadow-lg">
             <h3 className="text-xl font-semibold mb-4 text-[#E5E7EB]">
               {emailModal.isBulk ? "Send Bulk Email" : `Send Email to ${emailModal.to}`}
             </h3>
@@ -198,7 +205,7 @@ const handleSendEmail = async () => {
       {/* View Student Modal */}
       {viewModal.open && viewModal.student && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-          <div className="bg-[#0B1324] rounded-xl p-6 w-full max-w-md text-[#E5E7EB]">
+          <div className="bg-[#0284C7] rounded-xl p-6 w-full max-w-md text-[#E5E7EB]">
             <h3 className="text-xl font-semibold mb-4">Student Details</h3>
             <div className="space-y-2">
               <p><strong>Name:</strong> {viewModal.student.username}</p>
@@ -211,6 +218,36 @@ const handleSendEmail = async () => {
             </div>
             <div className="flex justify-end mt-4">
               <button className="px-4 py-2 bg-[#E2E8F0] rounded text-[#0F172A]" onClick={() => setViewModal({ open: false, student: null })}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+       {/* DELETE MODAL */}
+      {deleteModal.open && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
+          <div className="bg-white rounded-xl p-6 w-full max-w-sm shadow-lg">
+            <h3 className="text-lg font-semibold mb-4 text-gray-800">
+              Delete Student?
+            </h3>
+            <p className="text-sm text-gray-600 mb-6">
+              This action cannot be undone.
+            </p>
+
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setDeleteModal({ open: false, id: null })}
+                className="px-4 py-2 bg-gray-200 rounded"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={confirmDelete}
+                className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
+              >
+                Delete
+              </button>
             </div>
           </div>
         </div>
