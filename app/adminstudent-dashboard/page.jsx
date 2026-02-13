@@ -53,24 +53,32 @@ export default function AdminDashboard() {
   };
 
   // Send email via backend template
-  const handleSendEmail = async () => {
-    try {
-      const recipients = emailModal.isBulk
-        ? students.map((s) => s.email)
-        : [emailModal.to];
+const handleSendEmail = async () => {
+  try {
+    const recipients = emailModal.isBulk
+      ? students.map((s) => s.email)
+      : [emailModal.to];
 
-      await axios.post("http://localhost:5000/api/admin/send-email", {
-        recipients,
-        adminMessage: content, // optional custom message
-      });
+    // Ask admin for exam date or use default (optional)
+    const examDate = prompt("Enter exam date (e.g., Feb 20, 2026):", "Feb 20, 2026");
+    if (!examDate) return alert("Exam date is required!");
 
-      alert("Email sent successfully!");
-      setEmailModal({ open: false, to: "", isBulk: false });
-    } catch (err) {
-      console.error(err);
-      alert("Failed to send email");
-    }
-  };
+    await axios.post("http://localhost:5000/api/admin/send-professional-email", {
+      recipients,
+      studentName: emailModal.isBulk ? "Student" : students.find(s => s.email === emailModal.to)?.username,
+      examDate,
+      adminMessage: content, // optional note
+    });
+
+    alert("Professional email sent successfully!");
+    setEmailModal({ open: false, to: "", isBulk: false });
+
+  } catch (err) {
+    console.error(err);
+    alert("Failed to send email");
+  }
+};
+
 
   // Open student details modal
   const openViewModal = (student) => {

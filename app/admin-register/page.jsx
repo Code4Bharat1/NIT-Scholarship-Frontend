@@ -10,22 +10,23 @@ export default function AdminRegister() {
     email: "",
     password: ""
   });
-
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(""); // <-- success or error message
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setMessage(""); // reset message
 
     try {
       const res = await axios.post(
         "http://localhost:5000/api/admin/register",
         form
       );
-      alert(res.data.message);
+      setMessage(res.data.message); // show message on page
       setForm({ username: "", email: "", password: "" });
     } catch (err) {
-      alert(err.response?.data?.message || "Admin registration failed");
+      setMessage(err.response?.data?.message || "Admin registration failed");
     } finally {
       setLoading(false);
     }
@@ -36,18 +37,21 @@ export default function AdminRegister() {
       <Navbar />
 
       <div className="flex justify-center items-center min-h-[85vh] bg-[#F8FBFD]">
-
-        <div className="w-full max-w-lg p-8 rounded-2xl bg-white
-                        border border-[#E2E8F0] shadow-lg flex flex-col justify-center">
-
+        <div className="w-full max-w-lg p-8 rounded-2xl bg-white border border-[#E2E8F0] shadow-lg flex flex-col justify-center">
+          
           <h2 className="text-2xl font-semibold text-[#0F172A] text-center">
             Admin Registration
           </h2>
-
           <div className="w-16 h-1 bg-[#0EA5E9] mx-auto mt-2 mb-6 rounded"></div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Success/Error Message */}
+          {message && (
+            <div className="mb-4 text-center text-green-600 font-medium">
+              {message}
+            </div>
+          )}
 
+          <form onSubmit={handleSubmit} className="space-y-4">
             <input
               placeholder="Admin Username"
               required
@@ -83,7 +87,6 @@ export default function AdminRegister() {
             >
               {loading ? "Registering..." : "Register Admin"}
             </button>
-
           </form>
         </div>
       </div>
