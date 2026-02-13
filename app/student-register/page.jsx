@@ -28,7 +28,7 @@ export default function Register() {
         "http://localhost:5000/api/students/register",
         form
       );
-      setMessage({ type: "success", text: res.data.message });
+      setMessage({ type: "success",  text: "Registered successfully, please check your mail", });
       setForm({
         username: "",
         email: "",

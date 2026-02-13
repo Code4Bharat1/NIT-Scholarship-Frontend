@@ -52,11 +52,16 @@ export default function StudentProfilePage() {
 
   return (
     <div className="min-h-screen bg-slate-100">
-      {/* Navbar */}
-      <div className="w-full bg-slate-900 text-white px-8 py-4 flex justify-between items-center shadow-md">
-        <h1 className="text-xl font-semibold tracking-wide">
-          NIT Scholarship Portal
-        </h1>
+    <nav className="w-full bg-white border-b border-gray-200 h-[72px]">
+      <div className="max-w-7xl mx-auto px-12 h-full flex items-center justify-between">
+          {/* Logo */}
+        <div className="flex items-center h-full">
+          <img
+            src="/nexcore3-logo.png"
+            alt="Nexcore Logo"
+            className="h-70 w-auto object-contain"
+          />
+        </div>
         <button
           onClick={() => router.push("/student-dashboard")}
           className="px-4 py-2 bg-indigo-600 rounded hover:bg-indigo-700 text-white font-medium"
@@ -64,7 +69,7 @@ export default function StudentProfilePage() {
           Back to Dashboard
         </button>
       </div>
-
+</nav>
       {/* Profile Content */}
       <div className="max-w-4xl mx-auto bg-white mt-10 rounded-2xl shadow-lg border border-slate-200 p-10">
         <h1 className="text-3xl font-bold text-slate-800 mb-6">

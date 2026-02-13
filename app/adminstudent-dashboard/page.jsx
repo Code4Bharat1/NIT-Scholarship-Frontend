@@ -6,6 +6,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Eye, Mail, Trash2, Edit2 } from "lucide-react";
 
+
 export default function AdminDashboard() {
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -66,18 +67,17 @@ const handleSendEmail = async () => {
       ? students.map((s) => s.email)
       : [emailModal.to];
 
-    // Ask admin for exam date or use default (optional)
-    const examDate = prompt("Enter exam date (e.g., Feb 20, 2026):", "Feb 20, 2026");
-    if (!examDate) return alert("Exam date is required!");
+    const examDate = prompt("Enter exam date:", "Feb 20, 2026");
+    if (!examDate) return;
 
-    await axios.post("http://localhost:5000/api/admin/send-professional-email", {
+    await axios.post("http://localhost:5000/api/admin/send-email", {
       recipients,
-      studentName: emailModal.isBulk ? "Student" : students.find(s => s.email === emailModal.to)?.username,
+      studentName: "Student", // or dynamic if single
       examDate,
-      adminMessage: content, // optional note
+      adminMessage: content
     });
 
-    alert("Professional email sent successfully!");
+    alert("Email sent successfully!");
     setEmailModal({ open: false, to: "", isBulk: false });
 
   } catch (err) {
