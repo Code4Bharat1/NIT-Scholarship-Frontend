@@ -3,6 +3,19 @@
 import { useState, useEffect } from "react";
 import Navbar from "../components/NavBar";
 import axios from "axios";
+import { useRouter } from "next/navigation";
+
+
+
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 export default function AdminDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -14,15 +27,39 @@ export default function AdminDashboard() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [stats, setStats] = useState({
+    total: 0,
+    pending: 0,
+    approved: 0,
+    topRankers: 0,
+    rejected: 0,
+  });
+  // inside your component
+const router = useRouter();
 
   // Fetch students
   const fetchStudents = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/students?page=${page}&limit=5&search=${search}`
+        `http://localhost:5000/api/students?page=${page}&limit=1000&search=${search}`
       );
-      setStudents(res.data.students);
-      setTotalPages(res.data.totalPages);
+      const allStudents = res.data.students;
+
+      // Pagination for table
+      const pageLimit = 5;
+      const start = (page - 1) * pageLimit;
+      const end = start + pageLimit;
+      setStudents(allStudents.slice(start, end));
+      setTotalPages(Math.ceil(allStudents.length / pageLimit));
+
+      // Stats calculation
+      const total = allStudents.length;
+      const pending = allStudents.filter((s) => s.status === "pending").length;
+      const approved = allStudents.filter((s) => s.status === "approved").length;
+      const rejected = allStudents.filter((s) => s.status === "rejected").length;
+      const topRankers = allStudents.filter((s) => s.rank && s.rank <= 5).length;
+
+      setStats({ total, pending, approved, topRankers, rejected });
     } catch (err) {
       console.error("Failed to fetch students:", err);
     }
@@ -73,9 +110,14 @@ export default function AdminDashboard() {
     setViewModal({ open: true, student });
   };
 
+  const activeUsersToday = students.filter((s) => {
+    const lastLogin = new Date(s.lastLogin || 0);
+    const today = new Date();
+    return lastLogin.toDateString() === today.toDateString();
+  }).length;
+
   return (
     <div className="w-screen h-screen flex overflow-hidden bg-[#F8FBFD] text-[#0F172A]">
-      
       {/* Sidebar */}
       <div className={`bg-[#0EA5E9] flex flex-col justify-between transition-all duration-300 ${sidebarOpen ? "w-64" : "w-20"}`}>
         <div>
@@ -83,18 +125,16 @@ export default function AdminDashboard() {
             {sidebarOpen ? "Admin Panel" : "AP"}
           </h1>
           <ul className="space-y-4">
-            <li className="px-4 py-2 hover:bg-[#0284C7] cursor-pointer rounded text-white">
-              Dashboard
-            </li>
-            <li className="px-4 py-2 hover:bg-[#0284C7] cursor-pointer rounded text-white">
-              Students
-            </li>
-            <li className="px-4 py-2 hover:bg-red-500 cursor-pointer rounded text-white">
-              Logout
-            </li>
+            <li className="px-4 py-2 hover:bg-[#0284C7] cursor-pointer rounded text-white">Dashboard</li>
+           <li
+  className="px-4 py-2 hover:bg-[#0284C7] cursor-pointer rounded text-white"
+  onClick={() => router.push("/adminstudent-dashboard")}
+>
+  Students
+</li>
+            <li className="px-4 py-2 hover:bg-red-500 cursor-pointer rounded text-white">Logout</li>
           </ul>
         </div>
-
         <button
           className="mb-6 mx-auto py-2 px-4 bg-[#0284C7] hover:bg-[#0EA5E9] rounded text-white transition"
           onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -106,153 +146,116 @@ export default function AdminDashboard() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-auto">
         <Navbar />
-
         <div className="p-8">
           <h2 className="text-3xl font-semibold mb-4">Welcome, Admin!</h2>
 
-          {/* Bulk Email Button */}
-          <button
-            className="mb-4 bg-[#22C55E] hover:bg-[#16A34A] px-4 py-2 rounded text-white transition"
-            onClick={() => openEmailModal("", true)}
-          >
-            Send Email to All Students
-          </button>
+          {/* Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+            {[ 
+              { label: "Total Students", value: stats.total, color: "#0EA5E9", bg: "#EAF7FB" },
+              { label: "Pending", value: stats.pending, color: "#38BDF8", bg: "#EAF7FB" },
+              { label: "Approved", value: stats.approved, color: "#22C55E", bg: "#DCFCE7" },
+              { label: "Rejected", value: stats.rejected, color: "#EF4444", bg: "#FEE2E2" },
+              { label: "Top Rankers", value: stats.topRankers, color: "#8B5CF6", bg: "#EDE9FE" },
+              { label: "Active Today", value: activeUsersToday, color: "#0284C7", bg: "#DBEAFE" },
+            ].map((card) => (
+              <div key={card.label} className="p-4 rounded-xl shadow text-[#0F172A] bg-white">
+                <p className="text-sm mb-2">{card.label}</p>
+                <p className="text-2xl font-bold mb-2">{card.value}</p>
+                <div className="w-full h-2 rounded" style={{ backgroundColor: card.bg }}>
+                  <div
+                    className="h-2 rounded"
+                    style={{
+                      width: `${Math.min((card.value / stats.total) * 100, 100)}%`,
+                      backgroundColor: card.color,
+                    }}
+                  ></div>
+                </div>
+              </div>
+            ))}
+          </div>
 
-          <div className="bg-white rounded-xl p-4 shadow overflow-x-auto">
-            <table className="w-full table-auto border-collapse">
-              <thead>
-                <tr className="border-b border-[#E2E8F0]">
-                  <th className="text-left px-4 py-2">Name</th>
-                  <th className="text-left px-4 py-2">Email</th>
-                  <th className="text-left px-4 py-2">Mobile</th>
-                  <th className="text-left px-4 py-2">Actions</th>
-                </tr>
-              </thead>
+          {/* Bar Chart + Sidebar Stats */}
+          <div className="flex flex-col lg:flex-row gap-6 mb-6">
+            {/* Multi-Status Bar Chart */}
+            <div className="flex-1 bg-white p-4 rounded-xl shadow">
+              <h3 className="font-semibold mb-2 text-[#0F172A]">Student Status Overview</h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart
+                  data={[{
+                    label: "Students",
+                    registered: stats.total,
+                    loggedIn: activeUsersToday,
+                    pending: stats.pending,
+                    approved: stats.approved,
+                    rejected: stats.rejected,
+                  }]}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
+                  <XAxis dataKey="label" stroke="#475569" />
+                  <YAxis stroke="#475569" />
+                  <Tooltip
+                    contentStyle={{ backgroundColor: "#FFFFFF", borderColor: "#E2E8F0" }}
+                    itemStyle={{ color: "#0F172A" }}
+                  />
+                  <Bar dataKey="registered" fill="#0EA5E9" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="loggedIn" fill="#22C55E" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="pending" fill="#38BDF8" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="approved" fill="#0284C7" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="rejected" fill="#EF4444" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
 
-              <tbody>
-                {students.map((s) => (
-                  <tr key={s._id} className="border-b border-[#E2E8F0] hover:bg-[#EAF7FB]">
-                    <td className="px-4 py-2">{s.username}</td>
-                    <td className="px-4 py-2">{s.email}</td>
-                    <td className="px-4 py-2">{s.mobile || "N/A"}</td>
-                    <td className="px-4 py-2 flex gap-2">
-                      <button
-                        onClick={() => openViewModal(s)}
-                        className="px-2 py-1 border border-[#E2E8F0] rounded hover:bg-[#EAF7FB] transition"
-                      >
-                        View
-                      </button>
-                      <button
-                        onClick={() => openEmailModal(s.email)}
-                        className="px-2 py-1 border border-[#E2E8F0] rounded hover:bg-[#EAF7FB] transition"
-                      >
-                        Email
-                      </button>
-                      <button
-                        onClick={() => handleDelete(s._id)}
-                        className="px-2 py-1 border border-red-500 rounded hover:bg-red-500 hover:text-white transition"
-                      >
-                        Delete
-                      </button>
-                      <button
-                        onClick={() => alert("Edit student feature")}
-                        className="px-2 py-1 border border-[#E2E8F0] rounded hover:bg-[#EAF7FB] transition"
-                      >
-                        Edit
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-
-            {/* Pagination */}
-            <div className="flex justify-center items-center gap-4 mt-4">
-              <button
-                disabled={page === 1}
-                onClick={() => setPage(page - 1)}
-                className="px-3 py-1 bg-[#E2E8F0] rounded disabled:opacity-50"
-              >
-                Prev
-              </button>
-              <span>Page {page} of {totalPages}</span>
-              <button
-                disabled={page === totalPages}
-                onClick={() => setPage(page + 1)}
-                className="px-3 py-1 bg-[#E2E8F0] rounded disabled:opacity-50"
-              >
-                Next
-              </button>
+            {/* Sidebar Stats with mini bars */}
+            <div className="w-full lg:w-1/4 bg-white p-4 rounded-xl shadow flex flex-col justify-start items-start space-y-4">
+              <h3 className="font-semibold mb-2 text-[#0F172A]">Stats Overview</h3>
+              {[
+                { label: "Total Students", value: stats.total, max: stats.total },
+                { label: "Active Today", value: activeUsersToday, max: stats.total },
+                { label: "Pending", value: stats.pending, max: stats.total },
+                { label: "Approved", value: stats.approved, max: stats.total },
+                { label: "Rejected", value: stats.rejected, max: stats.total },
+                { label: "Top Rankers", value: stats.topRankers, max: stats.total },
+              ].map((stat) => (
+                <div key={stat.label} className="w-full">
+                  <div className="flex justify-between text-sm text-[#475569] mb-1">
+                    <span>{stat.label}</span>
+                    <span className="font-semibold">{stat.value}</span>
+                  </div>
+                  <div className="w-full h-2 bg-[#E2E8F0] rounded">
+                    <div
+                      className="h-2 rounded"
+                      style={{
+                        width: `${(stat.value / stat.max) * 100}%`,
+                        backgroundColor:
+                          stat.label === "Total Students"
+                            ? "#0EA5E9"
+                            : stat.label === "Active Today"
+                            ? "#22C55E"
+                            : stat.label === "Pending"
+                            ? "#38BDF8"
+                            : stat.label === "Approved"
+                            ? "#0284C7"
+                            : stat.label === "Rejected"
+                            ? "#EF4444"
+                            : "#8B5CF6",
+                      }}
+                    />
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
+
+        
+
         </div>
+
+       
+       
+
       </div>
-
-      {/* Email Modal */}
-      {emailModal.open && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-          <div className="bg-[#EAF7FB] rounded-xl p-6 w-full max-w-md text-[#0F172A]">
-            <h3 className="text-xl font-semibold mb-4">
-              {emailModal.isBulk ? "Send Bulk Email" : `Send Email to ${emailModal.to}`}
-            </h3>
-            <input
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-              placeholder="Subject"
-              className="w-full mb-3 px-3 py-2 rounded border border-[#E2E8F0] outline-none"
-            />
-            <textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder="Content"
-              rows={5}
-              className="w-full mb-3 px-3 py-2 rounded border border-[#E2E8F0] outline-none"
-            />
-            <div className="flex justify-end gap-3">
-              <button
-                className="px-4 py-2 bg-[#64748B] hover:bg-[#475569] rounded text-white"
-                onClick={() => setEmailModal({ open: false, to: "", isBulk: false })}
-              >
-                Cancel
-              </button>
-              <button
-                className="px-4 py-2 bg-[#0EA5E9] hover:bg-[#0284C7] rounded text-white"
-                onClick={handleSendEmail}
-              >
-                Send
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* View Modal */}
-      {viewModal.open && viewModal.student && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-          <div className="bg-[#EAF7FB] rounded-xl p-6 w-full max-w-md text-[#0F172A]">
-            <h3 className="text-xl font-semibold mb-4">Student Details</h3>
-            <div className="space-y-2">
-              <p><strong>Name:</strong> {viewModal.student.username}</p>
-              <p><strong>Email:</strong> {viewModal.student.email}</p>
-              <p><strong>Mobile:</strong> {viewModal.student.mobile || "N/A"}</p>
-              <p><strong>Parent Mobile:</strong> {viewModal.student.parentMobile || "N/A"}</p>
-              <p><strong>Address:</strong> {viewModal.student.address || "N/A"}</p>
-              <p><strong>Qualifications:</strong> {viewModal.student.qualifications || "N/A"}</p>
-              <p><strong>Course Interest:</strong> {viewModal.student.courseInterest || "N/A"}</p>
-              <p><strong>Registered On:</strong> {new Date(viewModal.student.createdAt).toLocaleDateString()}</p>
-              <p><strong>Login Allowed After:</strong> {new Date(viewModal.student.loginDate).toLocaleString()}</p>
-            </div>
-            <div className="flex justify-end mt-4">
-              <button
-                className="px-4 py-2 bg-[#64748B] hover:bg-[#475569] rounded text-white"
-                onClick={() => setViewModal({ open: false, student: null })}
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
