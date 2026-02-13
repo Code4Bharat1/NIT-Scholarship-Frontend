@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import axios from "axios";
-import Navbar from "../components/NavBar";
+import Adminnav from "../components/Adminnav";
 
 export default function AdminLogin() {
   const [form, setForm] = useState({
@@ -11,12 +11,12 @@ export default function AdminLogin() {
   });
 
   const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState(""); // show errors below inputs
+  const [message, setMessage] = useState(""); // success or error message
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setErrorMsg("");
+    setMessage(""); // reset message
 
     try {
       const res = await axios.post(
@@ -27,13 +27,16 @@ export default function AdminLogin() {
       // Store admin token
       localStorage.setItem("adminToken", res.data.token);
 
-      alert(res.data.message);
+      setMessage(res.data.message); // show success message
       setForm({ email: "", password: "" });
 
-      // Redirect to admin dashboard
-      window.location.href = "/dashboard";  // simple redirect
+      // Optional: redirect after 2 seconds
+      setTimeout(() => {
+        window.location.href = "/dashboard";
+      }, 2000);
+
     } catch (err) {
-      setErrorMsg(err.response?.data?.message || "Login failed");
+      setMessage(err.response?.data?.message || "Login failed"); // show error
     } finally {
       setLoading(false);
     }
@@ -41,7 +44,7 @@ export default function AdminLogin() {
 
   return (
     <>
-      <Navbar />
+      <Adminnav />
 
       <div className="flex justify-center items-center min-h-[85vh] bg-[#F8FBFD]">
 
@@ -53,6 +56,13 @@ export default function AdminLogin() {
           </h2>
 
           <div className="w-16 h-1 bg-[#0EA5E9] mx-auto mt-2 mb-6 rounded"></div>
+
+          {/* Message */}
+          {message && (
+            <p className={`mb-4 text-center font-medium ${message.toLowerCase().includes("failed") ? "text-red-500" : "text-green-600"}`}>
+              {message}
+            </p>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
 
@@ -73,8 +83,6 @@ export default function AdminLogin() {
               onChange={(e) => setForm({ ...form, password: e.target.value })}
               className="w-full px-4 py-3 rounded-lg bg-[#EAF7FB] text-[#0F172A] placeholder-[#64748B] border border-[#E2E8F0] outline-none focus:ring-2 focus:ring-[#0EA5E9]"
             />
-
-            {errorMsg && <p className="text-red-500 text-sm">{errorMsg}</p>}
 
             <button
               type="submit"
