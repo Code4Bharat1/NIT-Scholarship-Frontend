@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { FileText, Clock, Target } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Studentnav from "../components/Studentnav"
 
 
   type Student = {
@@ -64,50 +65,7 @@ export default function StudentDashboard() {
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col">
 
-      {/* NAVBAR */}
-      <div className="w-full bg-slate-900 text-white px-8 py-4 flex justify-between items-center shadow-md">
-        <h1 className="text-xl font-semibold tracking-wide">
-          NIT Scholarship Portal
-        </h1>
-
-        {student && (
-          <div className="relative">
-            <div
-              onClick={() => setOpen(!open)}
-              className="flex items-center gap-3 cursor-pointer"
-            >
-              <div className="w-9 h-9 rounded-full bg-indigo-500 flex items-center justify-center font-semibold">
-                {student.username?.charAt(0).toUpperCase()}
-              </div>
-
-              <div className="hidden md:block text-sm text-right">
-                <p className="font-medium">{student.username}</p>
-                <p className="text-slate-300 text-xs">{student.email}</p>
-              </div>
-            </div>
-
-            {open && (
-              <div className="absolute right-0 mt-3 w-44 bg-white text-slate-700 rounded-xl shadow-xl border z-50">
-               <button
-  onClick={() => {
-    setOpen(false);
-  }}
-  className="w-full text-left px-4 py-3 hover:bg-slate-100 rounded-t-xl"
->
-  Profile
-</button>
-
-                <button
-                  onClick={handleLogout}
-                  className="w-full text-left px-4 py-3 hover:bg-slate-100 text-red-500 rounded-b-xl"
-                >
-                  Logout
-                </button>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
+     <Studentnav/>
 
       {/* Content */}
       <div className="flex-1 px-6 py-10 flex justify-center">

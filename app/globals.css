@@ -23,3 +23,9 @@ body {
   background: #1e73be;
   color: white;
 }
+
+/* Remove default browser password reveal icon */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
