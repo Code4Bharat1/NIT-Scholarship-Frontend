@@ -1,339 +1,387 @@
+// app/page.tsx
+
+import Link from 'next/link';
 import Image from 'next/image';
+import HomeNav from '@/app/components/HomeNav';
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#0a1628] text-white">
-      {/* Header/Navbar - Fixed at top only */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center">
-              <span className="text-white font-bold text-lg">N</span>
-            </div>
-            <span className="text-gray-800 font-semibold text-lg">
-              NEXCORE INSTITUTE
-            </span>
-          </div>
-          <button className="px-6 py-2 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-md transition-colors">
-            Student Login
-          </button>
-        </div>
+    <main className="min-h-screen bg-white text-gray-900">
+      {/* Header/Navbar - Fixed at top */}
+      <header className="sticky top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
+        <HomeNav />
       </header>
 
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-20 px-6 overflow-hidden">
-        {/* Background Elements */}
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"></div>
+      {/* Hero Section - Reduced top padding */}
+      <section className="relative pt-8 pb-20 px-6 bg-gradient-to-b from-gray-50 to-white overflow-hidden">
+        {/* Large Background Logo Watermark */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-[0.12] pointer-events-none">
+          <Image
+            src="/verticallogo.png"
+            alt=""
+            width={1200}
+            height={300}
+            className="w-full max-w-[1200px] h-auto object-contain"
+          />
         </div>
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left Content */}
             <div className="space-y-8">
-              <div className="inline-block px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-md">
-                <span className="text-sm text-blue-400">
-                  Scholarship Entrance Exam
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg">
+                <svg
+                  className="w-4 h-4 text-blue-600"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span className="text-sm text-blue-600 font-medium">
+                  Applications closing in 48 hours
                 </span>
               </div>
 
-              <h1 className="text-5xl lg:text-6xl font-bold leading-tight">
-                Get <span className="text-cyan-400">₹10,000</span> Fee Waiver on
-                Merit
+              <h1 className="text-5xl lg:text-6xl font-bold leading-tight text-gray-900">
+                Merit should be <span className="text-cyan-500">rewarded.</span>
               </h1>
 
-              <button className="px-8 py-4 bg-cyan-400 hover:bg-cyan-500 text-gray-900 font-semibold rounded-lg transition-all transform hover:scale-105 shadow-lg shadow-cyan-500/20">
-                Register for Scholarship Exam
-              </button>
-
-              <p className="text-sm text-gray-400">
-                No payment required to apply
+              <p className="text-gray-600 text-lg">
+                Join 2000+ applicants competing for 250 prestigious scholarship
+                seats. Score high, get a ₹10,000 fee waiver, and secure your
+                future in tech.
               </p>
 
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link href="/student-register">
+                  <button className="px-8 py-4 bg-cyan-400 hover:bg-cyan-500 text-gray-900 font-bold rounded-lg transition-all transform hover:scale-105 shadow-lg">
+                    Apply for Scholarship
+                  </button>
+                </Link>
+              </div>
+
               {/* Stats */}
-              <div className="flex gap-12 pt-8">
+              <div className="grid grid-cols-4 gap-6 pt-8">
                 <div>
-                  <div className="text-3xl font-bold">2000+</div>
-                  <div className="text-sm text-gray-400">Applicants</div>
+                  <div className="text-3xl font-bold text-gray-900">2k+</div>
+                  <div className="text-sm text-gray-500">Applicants</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold">250</div>
-                  <div className="text-sm text-gray-400">Scholarships</div>
+                  <div className="text-3xl font-bold text-gray-900">250</div>
+                  <div className="text-sm text-gray-500">Seats</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold">Since 2011</div>
-                  <div className="text-sm text-gray-400">Trusted Legacy</div>
+                  <div className="text-3xl font-bold text-gray-900">₹10k</div>
+                  <div className="text-sm text-gray-500">Fee Waiver</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold text-gray-900">100%</div>
+                  <div className="text-sm text-gray-500">Merit Based</div>
                 </div>
               </div>
             </div>
 
-            {/* Right Image - AI Brain Visualization */}
+            {/* Right Image */}
             <div className="relative">
-              <div className="aspect-[4/3] relative rounded-2xl overflow-hidden bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-white/10">
-                {/* Placeholder for hero image */}
-                <div className="absolute inset-0 flex items-center justify-center text-gray-500">
-                  <Image src="/ai.png" alt="AI Illustration" fill />
-                </div>
-                {/* Overlay with limited seats indicator */}
-                <div className="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-sm rounded-lg p-4 flex items-center gap-3">
-                  <div className="w-3 h-3 bg-cyan-400 rounded-full animate-pulse"></div>
-                  <span className="text-gray-800 text-sm font-medium">
-                    Limited seats available
-                  </span>
+              <div className="aspect-[4/3] relative rounded-2xl overflow-hidden shadow-2xl">
+                <Image
+                  src="/2026.png"
+                  alt="Student with laptop"
+                  fill
+                  className="object-cover"
+                />
+                {/* Verified Badge */}
+                <div className="absolute bottom-6 left-6 bg-white/95 backdrop-blur-sm rounded-lg px-4 py-3 flex items-center gap-3 shadow-lg">
+                  <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                    <svg
+                      className="w-4 h-4 text-white"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold text-gray-900">
+                      Verified Scholar
+                    </div>
+                    <div className="text-xs text-gray-500">Batch of 2026</div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Bottom indicator */}
-        <div className="max-w-7xl mx-auto mt-16 text-center">
-          <a
-            href="#programs"
-            className="text-gray-400 text-sm hover:text-white transition-colors"
-          >
-            SCROLL DOWN
-          </a>
+      {/* Simple Application Process */}
+      <section className="py-20 px-6 bg-blue-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Simple Application Process
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Complete these steps to validate your eligibility and claim your
+              reward.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Step 1 */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-shadow">
+              <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
+                <span className="text-3xl font-bold text-blue-600">1</span>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                Register
+              </h3>
+              <p className="text-gray-600">
+                Create your account in under 2 minutes. No credit card or
+                payment required for the initial application.
+              </p>
+            </div>
+
+            {/* Step 2 */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-shadow">
+              <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
+                <span className="text-3xl font-bold text-blue-600">2</span>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                Evaluate
+              </h3>
+              <p className="text-gray-600">
+                Take the 90-minute aptitude test online or at one of our offline
+                centers near you.
+              </p>
+            </div>
+
+            {/* Step 3 */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-shadow">
+              <div className="w-16 h-16 bg-cyan-400 rounded-2xl flex items-center justify-center mb-6">
+                <svg
+                  className="w-8 h-8 text-white"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">Reward</h3>
+              <p className="text-gray-600">
+                Top 250 performers receive instant fee waivers and priority
+                admission status.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Programs Covered Section */}
-      <section
-        id="programs"
-        className="py-20 px-6 bg-gradient-to-b from-[#0a1628] to-[#0d1b2e]"
-      >
+      {/* Target Domains */}
+      <section className="py-20 px-6 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-end mb-12">
-            <h2 className="text-4xl font-bold">Programs Covered</h2>
-            <button className="px-6 py-2 bg-white text-gray-900 rounded-md hover:bg-gray-100 transition-colors font-medium">
-              View All Programs
-            </button>
+            <div>
+              <h2 className="text-4xl font-bold text-gray-900 mb-2">
+                Target Domains
+              </h2>
+              <p className="text-gray-600">
+                Scholarships valid for the following specializations
+              </p>
+            </div>
+            <Link href="/programs">
+              <button className="px-6 py-3 bg-gray-900 hover:bg-gray-800 text-white font-semibold rounded-lg transition-colors">
+                View All Programs
+              </button>
+            </Link>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* Program Card 1 - AI & ML */}
-            <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-white/5 hover:border-cyan-500/30 transition-all">
-              <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-blue-500/20 to-cyan-500/20">
-                <div className="absolute inset-0 flex items-center justify-center text-gray-500">
-                  <Image src="/hero.png" alt="AI Illustration" fill />
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Domain Card 1 - AI */}
+            <div className="group bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-cyan-400 hover:shadow-xl transition-all">
+              <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-blue-500/10 to-cyan-500/10">
+                <Image
+                  src="/ai.png"
+                  alt="Artificial Intelligence"
+                  fill
+                  className="object-cover"
+                />
               </div>
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h3 className="text-2xl font-bold mb-2">
-                  Artificial Intelligence & Machine Learning
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  Artificial Intelligence
                 </h3>
-                <p className="text-gray-300 text-sm">
-                  Build smart systems using data, models, and algorithms.
+                <p className="text-gray-600 text-sm mb-4">
+                  Machine learning frameworks and advanced deep learning
+                  concepts.
                 </p>
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <svg
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <span>6 Months</span>
+                </div>
               </div>
             </div>
 
-            {/* Program Card 2 - AI & Robotics */}
-            <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-white/5 hover:border-cyan-500/30 transition-all">
-              <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-purple-500/20 to-pink-500/20">
-                <div className="absolute inset-0 flex items-center justify-center text-gray-500">
-                  <Image src="/robotics.png" alt="AI Illustration" fill />
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+            {/* Domain Card 2 - Cyber Security */}
+            <div className="group bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-cyan-400 hover:shadow-xl transition-all">
+              <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-red-500/10 to-orange-500/10">
+                <Image
+                  src="/cs.png"
+                  alt="Cyber Security"
+                  fill
+                  className="object-cover"
+                />
               </div>
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h3 className="text-2xl font-bold mb-2">
-                  Artificial Intelligence & Robotics
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  Cyber Security
                 </h3>
-                <p className="text-gray-300 text-sm">
-                  Design and control intelligent robots and automation.
+                <p className="text-gray-600 text-sm mb-4">
+                  Ethical hacking, network defense, and cryptography.
                 </p>
-              </div>
-            </div>
-
-            {/* Program Card 3 - Cyber Security */}
-            <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-white/5 hover:border-cyan-500/30 transition-all">
-              <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-red-500/20 to-orange-500/20">
-                <div className="absolute inset-0 flex items-center justify-center text-gray-500">
-                  <Image src="/cs.png" alt="AI Illustration" fill />
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <svg
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <span>8 Months</span>
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-              </div>
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h3 className="text-2xl font-bold mb-2">Cyber Security</h3>
-                <p className="text-gray-300 text-sm">
-                  Learn to secure systems, networks, and critical data.
-                </p>
               </div>
             </div>
 
-            {/* Program Card 4 - VFX & Multimedia */}
-            <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-white/5 hover:border-orange-500/30 transition-all">
-            <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-yellow-500/20 to-orange-500/20">
-  <Image
-    src="/vfx.png"
-    alt="Graphic Animation, VFX & Multimedia"
-    fill
-    className="object-cover"
-  />
-  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-</div>
+            {/* Domain Card 3 - Robotics */}
+            <div className="group bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-cyan-400 hover:shadow-xl transition-all">
+              <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-purple-500/10 to-pink-500/10">
+                <Image
+                  src="/robotics.png"
+                  alt="Robotics"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  Robotics
+                </h3>
+                <p className="text-gray-600 text-sm mb-4">
+                  Industrial automation and sensor integration systems.
+                </p>
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <svg
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <span>12 Months</span>
+                </div>
+              </div>
+            </div>
 
-<div className="absolute bottom-0 left-0 right-0 p-6">
-  <h3 className="text-2xl font-bold mb-2">
-    Graphic Animation, VFX & Multimedia
-  </h3>
-  <p className="text-gray-300 text-sm">
-    Create impactful visuals, animation, and motion graphics.
-  </p>
-</div>
+            {/* Domain Card 4 - Data Science */}
+            <div className="group bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-cyan-400 hover:shadow-xl transition-all">
+              <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-green-500/10 to-teal-500/10">
+                <Image
+                  src="/graphics.jpeg"
+                  alt="Data Science"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  Data Science
+                </h3>
+                <p className="text-gray-600 text-sm mb-4">
+                  Big data processing, visualization, and business intelligence.
+                </p>
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <svg
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <span>6 Months</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Why Apply / How it Works Split Section */}
-      <section className="py-20 px-6 bg-gradient-to-b from-[#0d1b2e] to-gray-100">
+      {/* Why Top Students Choose Nexcore */}
+      <section className="py-20 px-6 bg-gradient-to-b from-white to-gray-50">
         <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16">
-            {/* Left - Why Apply */}
-            <div>
-              <h2 className="text-4xl font-bold mb-12 text-white">
-                Why Apply?
-              </h2>
-
-              <div className="space-y-6">
-                {/* Card 1 */}
-                <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 border border-white/10">
-                  <div className="w-12 h-12 bg-cyan-500/10 rounded-lg flex items-center justify-center mb-4">
-                    <svg
-                      className="w-6 h-6 text-cyan-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
-                      <path
-                        fillRule="evenodd"
-                        d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-bold mb-2 text-white">
-                    ₹10,000 Waiver
-                  </h3>
-                  <p className="text-gray-400 text-sm">
-                    Earn direct scholarship on fees upon qualifying.
-                  </p>
-                </div>
-
-                {/* Card 2 */}
-                <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 border border-white/10">
-                  <div className="w-12 h-12 bg-cyan-500/10 rounded-lg flex items-center justify-center mb-4">
-                    <svg
-                      className="w-6 h-6 text-cyan-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-bold mb-2 text-white">
-                    Merit-Based
-                  </h3>
-                  <p className="text-gray-400 text-sm">
-                    Selection is purely based on entrance exam score.
-                  </p>
-                </div>
-
-                {/* Card 3 */}
-                <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 border border-white/10">
-                  <div className="w-12 h-12 bg-cyan-500/10 rounded-lg flex items-center justify-center mb-4">
-                    <svg
-                      className="w-6 h-6 text-cyan-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z"
-                        clipRule="evenodd"
-                      />
-                      <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-bold mb-2 text-white">
-                    Industry Ready
-                  </h3>
-                  <p className="text-gray-400 text-sm">
-                    Curriculum aligned with modern tech needs.
-                  </p>
-                </div>
-
-                {/* Card 4 */}
-                <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 border border-white/10">
-                  <div className="w-12 h-12 bg-cyan-500/10 rounded-lg flex items-center justify-center mb-4">
-                    <svg
-                      className="w-6 h-6 text-cyan-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-bold mb-2 text-white">
-                    Since 2011
-                  </h3>
-                  <p className="text-gray-400 text-sm">
-                    Trusted institute with over a decade of legacy.
-                  </p>
-                </div>
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left Image */}
+            <div className="relative">
+              <div className="aspect-[4/3] relative rounded-2xl overflow-hidden shadow-2xl">
+                <Image
+                  src="/ml.png"
+                  alt="Students with certificates"
+                  fill
+                  className="object-cover"
+                />
               </div>
             </div>
 
-            {/* Right - How it Works */}
+            {/* Right Content */}
             <div>
-              <h2 className="text-4xl font-bold mb-12 text-gray-900">
-                How it Works
+              <h2 className="text-4xl font-bold text-gray-900 mb-8">
+                Why Top Students Choose Nexcore?
               </h2>
+              <p className="text-gray-600 mb-8">
+                We don't just teach technology; we shape careers. Our
+                scholarship is a testament to our commitment to merit.
+              </p>
 
-              <div className="space-y-8">
-                {/* Step 1 */}
+              <div className="space-y-6">
+                {/* Benefit 1 */}
                 <div className="flex gap-4">
                   <div className="flex-shrink-0">
-                    <div className="w-12 h-12 bg-gray-900 text-white rounded-full flex items-center justify-center font-bold text-xl">
-                      1
-                    </div>
-                  </div>
-                  <div className="pt-2">
-                    <p className="text-gray-800 font-medium">
-                      Fill out the simple application form. No payment required.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Step 2 */}
-                <div className="flex gap-4">
-                  <div className="flex-shrink-0">
-                    <div className="w-12 h-12 bg-gray-900 text-white rounded-full flex items-center justify-center font-bold text-xl">
-                      2
-                    </div>
-                  </div>
-                  <div className="pt-2">
-                    <p className="text-gray-800 font-medium">
-                      Appear for the verbal/offline entrance test on the
-                      scheduled date.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Step 3 */}
-                <div className="flex gap-4">
-                  <div className="flex-shrink-0">
-                    <div className="w-12 h-12 bg-cyan-400 text-gray-900 rounded-full flex items-center justify-center font-bold">
+                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                       <svg
-                        className="w-6 h-6"
+                        className="w-6 h-6 text-blue-600"
                         fill="currentColor"
                         viewBox="0 0 20 20"
                       >
@@ -345,23 +393,69 @@ export default function Home() {
                       </svg>
                     </div>
                   </div>
-                  <div className="pt-2">
-                    <h3 className="text-cyan-600 font-bold text-lg mb-1">
-                      Get Scholarship
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">
+                      Direct Fee Reduction
                     </h3>
-                    <p className="text-gray-800 font-medium">
-                      Top 250 performers receive the ₹10,000 fee waiver
-                      instantly.
+                    <p className="text-gray-600">
+                      Instant ₹10,000 off your tuition fees upon qualifying.
                     </p>
                   </div>
                 </div>
 
-                {/* Additional Info */}
-                <div className="mt-12 p-6 bg-white rounded-xl border-2 border-gray-200">
-                  <p className="text-gray-600 text-sm">
-                    Join a community of focused learners. Your merit is the only
-                    criteria here.
-                  </p>
+                {/* Benefit 2 */}
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <svg
+                        className="w-6 h-6 text-blue-600"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">
+                      Placement Advantage
+                    </h3>
+                    <p className="text-gray-600">
+                      Scholars get Day 0 access to campus recruitment
+                      opportunities.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Benefit 3 */}
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <svg
+                        className="w-6 h-6 text-blue-600"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">
+                      Industry Recognition
+                    </h3>
+                    <p className="text-gray-600">
+                      Earn the 'Merit Scholar' badge on your certification.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -370,28 +464,52 @@ export default function Home() {
       </section>
 
       {/* Final CTA Section */}
-      <section className="py-20 px-6 bg-gradient-to-b from-gray-100 to-[#0a1628]">
+      <section className="py-20 px-6 bg-[#1e293b]">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-12 border border-white/10">
-            <h2 className="text-4xl font-bold mb-4 text-white">
-              Ready to Claim Your Spot?
-            </h2>
+          <h2 className="text-4xl lg:text-5xl font-bold mb-6 text-white">
+            Ready to Claim Your Spot?
+          </h2>
+          <p className="text-lg text-gray-300 mb-12">
+            Don't let this opportunity pass.{' '}
+            <span className="text-white font-semibold">
+              Only 250 scholarships
+            </span>{' '}
+            are up for grabs.
+          </p>
 
-            <p className="text-gray-300 mb-2">
-              Don&apos;t let this opportunity pass.{' '}
-              <span className="text-orange-400 font-semibold">
-                Only 250 scholarships
-              </span>{' '}
-              are up for grabs.
-            </p>
-
-            <button className="mt-8 px-10 py-4 bg-cyan-400 hover:bg-cyan-500 text-gray-900 font-bold rounded-lg transition-all transform hover:scale-105 shadow-lg shadow-cyan-500/20">
+          <Link href="/student-register">
+            <button className="px-12 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-all transform hover:scale-105 shadow-lg text-lg mb-8">
               Apply for Scholarship Exam
             </button>
+          </Link>
 
-            <div className="mt-8 flex items-center justify-center gap-8 text-sm text-gray-400">
-              <span>Merit-Based</span>
-              <span className="w-1 h-1 bg-gray-600 rounded-full"></span>
+          <div className="flex items-center justify-center gap-6 text-sm text-gray-400">
+            <div className="flex items-center gap-2">
+              <svg
+                className="w-4 h-4 text-green-500"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span>Merit-based</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <svg
+                className="w-4 h-4 text-green-500"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                  clipRule="evenodd"
+                />
+              </svg>
               <span>Limited Seats</span>
             </div>
           </div>
@@ -399,9 +517,42 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 px-6 bg-[#0a1628] border-t border-white/5">
-        <div className="max-w-7xl mx-auto text-center text-gray-400 text-sm">
-          <p>© 2024 Nexcore Institute of Technology. All rights reserved.</p>
+      <footer className="py-8 px-6 bg-[#0f172a]">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="flex items-center gap-3">
+              <Image
+                src="/logo.png"
+                alt="Nexcore"
+                width={120}
+                height={30}
+                className="h-8 w-auto object-contain brightness-0 invert"
+              />
+              <p className="text-gray-400 text-sm">
+                © 2024 Nexcore Institute. All rights reserved.
+              </p>
+            </div>
+            <div className="flex gap-8 text-sm">
+              <Link
+                href="/privacy"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                href="/terms"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                Terms of Service
+              </Link>
+              <Link
+                href="/contact"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                Contact Support
+              </Link>
+            </div>
+          </div>
         </div>
       </footer>
     </main>
