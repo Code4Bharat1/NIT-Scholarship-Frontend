@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import NavBar from "../components/NavBar";
-import Sidebar from "../components/resultSidebar";
+import Sidebar from "../components/ResultSidebar";
+
 
 export default function ResultsPage() {
   const [students, setStudents] = useState([]);

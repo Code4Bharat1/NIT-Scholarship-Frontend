@@ -4,8 +4,7 @@ import { useState, useEffect } from "react";
 import Navbar from "../components/NavBar";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-
-
+import ResultSidebar from "../components/ResultSidebar";
 
 import {
   BarChart,
@@ -34,8 +33,8 @@ export default function AdminDashboard() {
     topRankers: 0,
     rejected: 0,
   });
-  // inside your component
-const router = useRouter();
+
+  const router = useRouter();
 
   // Fetch students
   const fetchStudents = async () => {
@@ -69,47 +68,6 @@ const router = useRouter();
     fetchStudents();
   }, [page, search]);
 
-  const handleDelete = async (id) => {
-    if (!confirm("Are you sure you want to delete this student?")) return;
-    try {
-      await axios.delete(`http://localhost:5000/api/students/${id}`);
-      fetchStudents();
-    } catch (err) {
-      console.error(err);
-      alert("Failed to delete student");
-    }
-  };
-
-  const openEmailModal = (email = "", isBulk = false) => {
-    setEmailModal({ open: true, to: email, isBulk });
-    setSubject("");
-    setContent("");
-  };
-
-  const handleSendEmail = async () => {
-    try {
-      const recipients = emailModal.isBulk
-        ? students.map((s) => s.email)
-        : [emailModal.to];
-
-      await axios.post("http://localhost:5000/api/admin/send-email", {
-        recipients,
-        subject,
-        content,
-      });
-
-      alert("Email sent successfully!");
-      setEmailModal({ open: false, to: "", isBulk: false });
-    } catch (err) {
-      console.error(err);
-      alert("Failed to send email");
-    }
-  };
-
-  const openViewModal = (student) => {
-    setViewModal({ open: true, student });
-  };
-
   const activeUsersToday = students.filter((s) => {
     const lastLogin = new Date(s.lastLogin || 0);
     const today = new Date();
@@ -119,39 +77,20 @@ const router = useRouter();
   return (
     <div className="w-screen h-screen flex overflow-hidden bg-[#F8FBFD] text-[#0F172A]">
       {/* Sidebar */}
-      <div className={`bg-[#0EA5E9] flex flex-col justify-between transition-all duration-300 ${sidebarOpen ? "w-64" : "w-20"}`}>
-        <div>
-          <h1 className="text-2xl font-bold text-center mt-6 mb-8 text-white">
-            {sidebarOpen ? "Admin Panel" : "AP"}
-          </h1>
-          <ul className="space-y-4">
-            <li className="px-4 py-2 hover:bg-[#0284C7] cursor-pointer rounded text-white">Dashboard</li>
-           <li
-  className="px-4 py-2 hover:bg-[#0284C7] cursor-pointer rounded text-white"
-  onClick={() => router.push("/adminstudent-dashboard")}
->
-  Students
-</li>
-            <li className="px-4 py-2 hover:bg-red-500 cursor-pointer rounded text-white">Logout</li>
-          </ul>
-        </div>
-        <button
-          className="mb-6 mx-auto py-2 px-4 bg-[#0284C7] hover:bg-[#0EA5E9] rounded text-white transition"
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-        >
-          {sidebarOpen ? "Collapse" : "Expand"}
-        </button>
-      </div>
+      <ResultSidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-auto">
+      <div
+        className={`flex-1 flex flex-col overflow-auto transition-all duration-300`}
+        style={{ marginLeft: sidebarOpen ? "16rem" : "5rem" }} // Adjust according to sidebar width
+      >
         <Navbar />
         <div className="p-8">
           <h2 className="text-3xl font-semibold mb-4">Welcome, Admin!</h2>
 
           {/* Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
-            {[ 
+            {[
               { label: "Total Students", value: stats.total, color: "#0EA5E9", bg: "#EAF7FB" },
               { label: "Pending", value: stats.pending, color: "#38BDF8", bg: "#EAF7FB" },
               { label: "Approved", value: stats.approved, color: "#22C55E", bg: "#DCFCE7" },
@@ -169,7 +108,7 @@ const router = useRouter();
                       width: `${Math.min((card.value / stats.total) * 100, 100)}%`,
                       backgroundColor: card.color,
                     }}
-                  ></div>
+                  />
                 </div>
               </div>
             ))}
@@ -194,10 +133,7 @@ const router = useRouter();
                   <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
                   <XAxis dataKey="label" stroke="#475569" />
                   <YAxis stroke="#475569" />
-                  <Tooltip
-                    contentStyle={{ backgroundColor: "#FFFFFF", borderColor: "#E2E8F0" }}
-                    itemStyle={{ color: "#0F172A" }}
-                  />
+                  <Tooltip contentStyle={{ backgroundColor: "#FFFFFF", borderColor: "#E2E8F0" }} itemStyle={{ color: "#0F172A" }} />
                   <Bar dataKey="registered" fill="#0EA5E9" radius={[4, 4, 0, 0]} />
                   <Bar dataKey="loggedIn" fill="#22C55E" radius={[4, 4, 0, 0]} />
                   <Bar dataKey="pending" fill="#38BDF8" radius={[4, 4, 0, 0]} />
@@ -247,14 +183,7 @@ const router = useRouter();
               ))}
             </div>
           </div>
-
-        
-
         </div>
-
-       
-       
-
       </div>
     </div>
   );

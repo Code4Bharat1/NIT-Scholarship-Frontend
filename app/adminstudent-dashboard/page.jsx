@@ -2,14 +2,13 @@
 
 import { useState, useEffect } from "react";
 import Navbar from "../components/NavBar";
+import ResultSidebar from "../components/ResultSidebar";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { Eye, Mail, Trash2, Edit2 } from "lucide-react";
-
+import { Eye, Mail, Trash2 } from "lucide-react";
 
 export default function AdminDashboard() {
   const router = useRouter();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [students, setStudents] = useState([]);
   const [emailModal, setEmailModal] = useState({ open: false, to: "", isBulk: false });
   const [viewModal, setViewModal] = useState({ open: false, student: null });
@@ -17,7 +16,9 @@ export default function AdminDashboard() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
- const [deleteModal, setDeleteModal] = useState({ open: false, id: null });
+  const [deleteModal, setDeleteModal] = useState({ open: false, id: null });
+  const [loginDate, setLoginDate] = useState(""); 
+  const [successMsg, setSuccessMsg] = useState(""); // success notification
 
   // Fetch students with search + pagination
   const fetchStudents = async () => {
@@ -36,13 +37,8 @@ export default function AdminDashboard() {
     fetchStudents();
   }, [page, search]);
 
-
-  // OPEN delete modal
-  const handleDelete = (id) => {
-    setDeleteModal({ open: true, id });
-  };
-
-  // CONFIRM delete
+  // Delete student
+  const handleDelete = (id) => setDeleteModal({ open: true, id });
   const confirmDelete = async () => {
     try {
       await axios.delete(`http://localhost:5000/api/students/${deleteModal.id}`);
@@ -50,7 +46,6 @@ export default function AdminDashboard() {
       setDeleteModal({ open: false, id: null });
     } catch (err) {
       console.error(err);
-      alert("Failed to delete student");
     }
   };
 
@@ -58,60 +53,57 @@ export default function AdminDashboard() {
   const openEmailModal = (email = "", isBulk = false) => {
     setEmailModal({ open: true, to: email, isBulk });
     setContent("");
+    setLoginDate("");
   };
 
-  // Send email via backend template
-const handleSendEmail = async () => {
-  try {
+  // Send email
+  const handleSendEmail = async () => {
+    if (!loginDate) return;
+
     const recipients = emailModal.isBulk
       ? students.map((s) => s.email)
       : [emailModal.to];
 
-    const examDate = prompt("Enter exam date:", "Feb 20, 2026");
-    if (!examDate) return;
+    try {
+      await axios.post("http://localhost:5000/api/admin/send-email", {
+        recipients,
+        studentName: "Student",
+        examDate: loginDate,
+        adminMessage: content
+      });
 
-    await axios.post("http://localhost:5000/api/admin/send-email", {
-      recipients,
-      studentName: "Student", // or dynamic if single
-      examDate,
-      adminMessage: content
-    });
+      // Close modal and reset states
+      setEmailModal({ open: false, to: "", isBulk: false });
+      setLoginDate("");
+      setContent("");
 
-    alert("Email sent successfully!");
-    setEmailModal({ open: false, to: "", isBulk: false });
+      // Show success message
+      setSuccessMsg("Email sent successfully!");
+      setTimeout(() => setSuccessMsg(""), 3000);
 
-  } catch (err) {
-    console.error(err);
-    alert("Failed to send email");
-  }
-};
-
-
-  // Open student details modal
-  const openViewModal = (student) => {
-    setViewModal({ open: true, student });
+    } catch (err) {
+      console.error(err);
+    }
   };
+
+  const openViewModal = (student) => setViewModal({ open: true, student });
 
   return (
     <div className="w-screen h-screen flex overflow-hidden bg-[#F8FBFD] text-[#0F172A]">
       {/* Sidebar */}
-      <div className={`bg-[#0EA5E9] flex flex-col justify-between transition-all duration-300 ${sidebarOpen ? "w-64" : "w-20"}`}>
-        <div>
-          <h1 className="text-2xl font-bold text-center mt-6 mb-8 text-white">{sidebarOpen ? "Admin Panel" : "AP"}</h1>
-          <ul className="space-y-4">
-            <li className="px-4 py-2 hover:bg-[#0284C7] cursor-pointer rounded text-white" onClick={() => router.push("/dashboard")}>Dashboard</li>
-            <li className="px-4 py-2 hover:bg-[#0284C7] cursor-pointer rounded text-white" onClick={() => router.push("/adminstudent-dashboard")}>Students</li>
-            <li className="px-4 py-2 hover:bg-red-500 cursor-pointer rounded text-white" onClick={() => router.push("/login")}>Logout</li>
-          </ul>
-        </div>
-        <button className="mb-6 mx-auto py-2 px-4 bg-[#0284C7] hover:bg-[#0EA5E9] rounded text-white transition" onClick={() => setSidebarOpen(!sidebarOpen)}>
-          {sidebarOpen ? "Collapse" : "Expand"}
-        </button>
-      </div>
+      <ResultSidebar />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-auto">
+      <div className="flex-1 flex flex-col overflow-auto ml-64">
         <Navbar />
+
+        {/* Success Notification */}
+        {successMsg && (
+          <div className="fixed top-20 right-5 z-50 bg-green-500 text-white px-4 py-2 rounded shadow-lg animate-slide-in">
+            {successMsg}
+          </div>
+        )}
+
         <div className="p-8">
           <h2 className="text-3xl font-semibold mb-4">Welcome, Admin!</h2>
 
@@ -159,9 +151,6 @@ const handleSendEmail = async () => {
                       <button onClick={() => handleDelete(s._id)} className="p-2 border border-[#E2E8F0] rounded hover:text-white">
                         <Trash2 className="w-5 h-5 text-[#EF4444]" />
                       </button>
-                      <button onClick={() => alert("Edit student feature")} className="p-2 border border-[#E2E8F0] rounded hover:bg-[#EAF7FB]">
-                        <Edit2 className="w-5 h-5 text-[#22C55E]" />
-                      </button>
                     </td>
                   </tr>
                 ))}
@@ -180,23 +169,45 @@ const handleSendEmail = async () => {
 
       {/* Email Modal */}
       {emailModal.open && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
-          <div className="bg-[#0284C7] rounded-xl p-6 w-full max-w-md shadow-lg">
-            <h3 className="text-xl font-semibold mb-4 text-[#E5E7EB]">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/20 z-50">
+          <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-lg">
+            <h3 className="text-xl font-semibold mb-4 text-[#1e293b]">
               {emailModal.isBulk ? "Send Bulk Email" : `Send Email to ${emailModal.to}`}
             </h3>
+
+            <div className="mb-3">
+              <label className="block text-sm font-medium text-[#1e293b] mb-1">
+                Login Available From:
+              </label>
+              <input
+                type="date"
+                value={loginDate}
+                onChange={(e) => setLoginDate(e.target.value)}
+                className="w-full px-3 py-2 rounded bg-[#f1f5f9] text-[#0f172a] border border-[#e2e8f0] focus:ring-2 focus:ring-[#0ea5e9] outline-none"
+              />
+            </div>
 
             <textarea
               placeholder="Optional message from admin..."
               value={content}
               onChange={(e) => setContent(e.target.value)}
               rows={5}
-              className="w-full mb-3 px-3 py-2 rounded bg-[#EAF7FB] text-[#0F172A] placeholder-[#64748B] outline-none border border-[#E2E8F0] focus:ring-2 focus:ring-[#0EA5E9]"
+              className="w-full mb-3 px-3 py-2 rounded bg-[#f1f5f9] text-[#0f172a] placeholder-[#64748B] outline-none border border-[#e2e8f0] focus:ring-2 focus:ring-[#0ea5e9]"
             />
 
             <div className="flex justify-end gap-3 mt-2">
-              <button className="px-4 py-2 bg-[#E2E8F0] hover:bg-[#CBD5E1] rounded text-[#0F172A] font-medium transition" onClick={() => setEmailModal({ open: false, to: "", isBulk: false })}>Cancel</button>
-              <button className="px-4 py-2 bg-[#0EA5E9] hover:bg-[#0284C7] rounded text-white font-medium transition" onClick={handleSendEmail}>Send</button>
+              <button
+                className="px-4 py-2 bg-[#e2e8f0] hover:bg-[#cbd5e1] rounded text-[#1e293b] font-medium transition"
+                onClick={() => setEmailModal({ open: false, to: "", isBulk: false })}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 bg-[#0ea5e9] hover:bg-[#0284c7] rounded text-white font-medium transition"
+                onClick={handleSendEmail}
+              >
+                Send
+              </button>
             </div>
           </div>
         </div>
@@ -204,9 +215,9 @@ const handleSendEmail = async () => {
 
       {/* View Student Modal */}
       {viewModal.open && viewModal.student && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-          <div className="bg-[#0284C7] rounded-xl p-6 w-full max-w-md text-[#E5E7EB]">
-            <h3 className="text-xl font-semibold mb-4">Student Details</h3>
+        <div className="fixed inset-0 flex items-center justify-center bg-black/20 z-50">
+          <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-lg text-[#334155]">
+            <h3 className="text-xl font-semibold mb-4 text-[#1e293b]">Student Details</h3>
             <div className="space-y-2">
               <p><strong>Name:</strong> {viewModal.student.username}</p>
               <p><strong>Email:</strong> {viewModal.student.email}</p>
@@ -217,13 +228,18 @@ const handleSendEmail = async () => {
               <p><strong>Login Date:</strong> {viewModal.student.loginDate ? new Date(viewModal.student.loginDate).toLocaleString() : "N/A"}</p>
             </div>
             <div className="flex justify-end mt-4">
-              <button className="px-4 py-2 bg-[#E2E8F0] rounded text-[#0F172A]" onClick={() => setViewModal({ open: false, student: null })}>Close</button>
+              <button
+                className="px-4 py-2 bg-[#e2e8f0] hover:bg-[#cbd5e1] rounded text-[#1e293b]"
+                onClick={() => setViewModal({ open: false, student: null })}
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>
       )}
 
-       {/* DELETE MODAL */}
+      {/* Delete Modal */}
       {deleteModal.open && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
           <div className="bg-white rounded-xl p-6 w-full max-w-sm shadow-lg">
@@ -233,7 +249,6 @@ const handleSendEmail = async () => {
             <p className="text-sm text-gray-600 mb-6">
               This action cannot be undone.
             </p>
-
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setDeleteModal({ open: false, id: null })}
@@ -241,7 +256,6 @@ const handleSendEmail = async () => {
               >
                 Cancel
               </button>
-
               <button
                 onClick={confirmDelete}
                 className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
